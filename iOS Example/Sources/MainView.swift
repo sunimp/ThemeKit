@@ -1,4 +1,5 @@
 import SwiftUI
+import ThemeKit
 
 struct MainView: View {
 
@@ -6,13 +7,12 @@ struct MainView: View {
         TabView {
             NavigationView {
                 ColorsView()
-                        .navigationTitle("Colors")
+                    .navigationTitle("Colors")
             }
-                    .tabItem {
-                        Image(systemName: "paintpalette")
-                        Text("Colors")
-                    }
-
+            .tabItem {
+                Image(systemName: "paintpalette")
+                Text("Colors")
+            }
             NavigationView {
                 FontsView()
                         .navigationTitle("Fonts")
@@ -22,7 +22,7 @@ struct MainView: View {
                         Text("Fonts")
                     }
         }
-                .accentColor(.themeJacob)
+                .accentColor(.cg005)
     }
 
 }

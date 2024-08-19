@@ -1,5 +1,12 @@
-import Combine
+//
+//  ThemeWindow.swift
+//  CryptoWallet
+//
+//  Created by Sun on 2024/8/19.
+//
+
 import UIKit
+import Combine
 
 open class ThemeWindow: UIWindow {
     private var cancellables = Set<AnyCancellable>()

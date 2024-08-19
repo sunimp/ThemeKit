@@ -1,5 +1,13 @@
-import Combine
+//
+//  ThemeManager.swift
+//  CryptoWallet
+//
+//  Created by Sun on 2024/8/19.
+//
+
 import UIKit
+import Combine
+
 import WWExtensions
 
 public class ThemeManager {
@@ -13,6 +21,7 @@ public class ThemeManager {
             UserDefaults.standard.set(themeMode.rawValue, forKey: ThemeManager.userDefaultsKey)
             currentTheme = ThemeManager.theme(mode: themeMode)
             Theme.updateNavigationBarTheme()
+            Theme.updateTabBarTheme()
         }
     }
 
@@ -20,12 +29,7 @@ public class ThemeManager {
 
     init() {
         var storedThemeMode: ThemeMode?
-
-        //migrate from custom theme to system supported
-        if let oldLightMode = UserDefaults.standard.value(forKey: "light_mode") as? Bool {
-            storedThemeMode = oldLightMode ? .light : .dark
-            UserDefaults.standard.set(nil, forKey: "light_mode")
-        } else if let newLightMode = UserDefaults.standard.value(forKey: ThemeManager.userDefaultsKey) as? String {
+        if let newLightMode = UserDefaults.standard.value(forKey: ThemeManager.userDefaultsKey) as? String {
             storedThemeMode = ThemeMode(rawValue: newLightMode)
         }
 
@@ -54,14 +58,30 @@ public class Theme {
     public static func updateNavigationBarTheme() {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithTransparentBackground()
-        standardAppearance.backgroundColor = .themeNavigationBarBackground
-        standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.themeLeah]
-        standardAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.themeLeah]
+        standardAppearance.shadowColor = .clear
+        standardAppearance.shadowImage = UIImage()
+        standardAppearance.backgroundColor = .zx009
+        standardAppearance.backgroundImage = UIImage()
+        standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.zx001]
+        standardAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.zx001]
 
         UINavigationBar.appearance().standardAppearance = standardAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = standardAppearance
     }
 
+    public static func updateTabBarTheme() {
+        let standardAppearance = UITabBarAppearance()
+        standardAppearance.configureWithTransparentBackground()
+        standardAppearance.shadowColor = .clear
+        standardAppearance.shadowImage = UIImage()
+        standardAppearance.backgroundColor = .zx009
+        standardAppearance.backgroundImage = UIImage()
+        
+        UITabBar.appearance().standardAppearance = standardAppearance
+        if #available(iOS 15.0, *) {
+            UITabBar.appearance().scrollEdgeAppearance = standardAppearance
+        }
+    }
 }
 
 public enum ThemeMode: String {

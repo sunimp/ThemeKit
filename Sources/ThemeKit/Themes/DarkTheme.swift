@@ -1,6 +1,14 @@
+//
+//  DarkTheme.swift
+//  CryptoWallet
+//
+//  Created by Sun on 2024/8/19.
+//
+
 import UIKit
 
 class DarkTheme: ITheme {
+    
     let hudBlurStyle: UIBlurEffect.Style = .dark
     let keyboardAppearance: UIKeyboardAppearance = .dark
     let statusBarStyle: UIStatusBarStyle = .lightContent

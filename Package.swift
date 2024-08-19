@@ -15,7 +15,7 @@ let package = Package(
         dependencies: [
             .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.9.0")),
             .package(url: "https://github.com/onevcat/Kingfisher.git", .upToNextMajor(from: "7.12.0")),
-            .package(url: "https://github.com/sunimp/UIExtensions.Swift.git", .upToNextMajor(from: "1.0.2")),
+            .package(url: "https://github.com/sunimp/UIExtensions.Swift.git", .upToNextMajor(from: "1.0.4")),
             .package(url: "https://github.com/sunimp/WWExtensions.Swift.git", .upToNextMajor(from: "1.0.7")),
         ],
         targets: [
@@ -26,6 +26,9 @@ let package = Package(
                         "Kingfisher",
                         .product(name: "UIExtensions", package: "UIExtensions.Swift"),
                         .product(name: "WWExtensions", package: "WWExtensions.Swift"),
+                    ],
+                    resources: [
+                        .process("Fonts")
                     ]
             ),
         ]

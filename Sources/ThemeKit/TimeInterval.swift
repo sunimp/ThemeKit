@@ -1,3 +1,10 @@
+//
+//  TimeInterval+Animation.swift
+//  CryptoWallet
+//
+//  Created by Sun on 2024/8/19.
+//
+
 import Foundation
 
 extension TimeInterval {
