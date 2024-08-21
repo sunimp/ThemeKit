@@ -1,6 +1,6 @@
 //
-//  Color.swift
-//  CryptoWallet
+//  Colors.swift
+//  ThemeKit
 //
 //  Created by Sun on 2024/8/19.
 //

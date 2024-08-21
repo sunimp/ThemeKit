@@ -1,6 +1,6 @@
 //
 //  ThemeWindow.swift
-//  CryptoWallet
+//  ThemeKit
 //
 //  Created by Sun on 2024/8/19.
 //
@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 open class ThemeWindow: UIWindow {
+    
     private var cancellables = Set<AnyCancellable>()
 
     public override init(frame: CGRect) {
@@ -23,6 +24,7 @@ open class ThemeWindow: UIWindow {
                 .store(in: &cancellables)
     }
 
+    @available(*, unavailable)
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

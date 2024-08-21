@@ -8,7 +8,7 @@ UI themes and components
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/horizontalsystems/ThemeKit.Swift.git", .upToNextMajor(from: "1.0.0"))
+    .package(url: "https://github.com/sunimp/ThemeKit.Swift.git", .upToNextMajor(from: "2.0.5"))
 ]
 ```
 

@@ -1,4 +1,12 @@
+//
+//  ColorsView.swift
+//  ThemeKit-Example
+//
+//  Created by Sun on 2024/8/19.
+//
+
 import SwiftUI
+
 import ThemeKit
 
 struct ColorsView: View {

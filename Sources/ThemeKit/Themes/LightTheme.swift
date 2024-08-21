@@ -1,6 +1,6 @@
 //
 //  LightTheme.swift
-//  CryptoWallet
+//  ThemeKit
 //
 //  Created by Sun on 2024/8/19.
 //
