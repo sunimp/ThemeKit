@@ -11,6 +11,7 @@ import Combine
 import WWExtensions
 
 public class ThemeManager {
+    
     private static let defaultLightMode: ThemeMode = .system
     private static let userDefaultsKey = "theme_mode"
 
@@ -21,7 +22,6 @@ public class ThemeManager {
             UserDefaults.standard.set(themeMode.rawValue, forKey: ThemeManager.userDefaultsKey)
             currentTheme = ThemeManager.theme(mode: themeMode)
             Theme.updateNavigationBarTheme()
-            Theme.updateTabBarTheme()
         }
     }
 
@@ -67,20 +67,6 @@ public class Theme {
 
         UINavigationBar.appearance().standardAppearance = standardAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = standardAppearance
-    }
-
-    public static func updateTabBarTheme() {
-        let standardAppearance = UITabBarAppearance()
-        standardAppearance.configureWithTransparentBackground()
-        standardAppearance.shadowColor = .clear
-        standardAppearance.shadowImage = UIImage()
-        standardAppearance.backgroundColor = .zx009
-        standardAppearance.backgroundImage = UIImage()
-        
-        UITabBar.appearance().standardAppearance = standardAppearance
-        if #available(iOS 15.0, *) {
-            UITabBar.appearance().scrollEdgeAppearance = standardAppearance
-        }
     }
 }
 
