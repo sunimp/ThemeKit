@@ -140,15 +140,15 @@ struct ColorsView: View {
 
         if themeModeIterator == 0 {
             ThemeManager.shared.themeMode = .system
-            UIApplication.shared.activeWindow?.overrideUserInterfaceStyle = .unspecified
+            UIWindow.keyWindow?.overrideUserInterfaceStyle = .unspecified
         }
         if themeModeIterator == 1 {
             ThemeManager.shared.themeMode = .dark
-            UIApplication.shared.activeWindow?.overrideUserInterfaceStyle = .dark
+            UIWindow.keyWindow?.overrideUserInterfaceStyle = .dark
         }
         if themeModeIterator == 2 {
             ThemeManager.shared.themeMode = .light
-            UIApplication.shared.activeWindow?.overrideUserInterfaceStyle = .light
+            UIWindow.keyWindow?.overrideUserInterfaceStyle = .light
         }
 
         currentMode = ThemeManager.shared.themeMode.rawValue
