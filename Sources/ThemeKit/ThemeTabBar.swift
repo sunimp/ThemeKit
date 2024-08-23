@@ -544,7 +544,7 @@ open class ThemeTabBarItemContentView: UIView {
         }
     }
 
-    open var titleFont: UIFont = .subhead1 {
+    open var titleFont: UIFont = .captionM {
         didSet {
             if titleFont != oldValue {
                 self.updateLayout()

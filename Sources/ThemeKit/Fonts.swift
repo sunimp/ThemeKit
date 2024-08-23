@@ -17,20 +17,20 @@ extension Font {
     public static let themeTitle3: Font = .roboto(size: 22, weight: .bold)
     public static let themeTitle4: Font = .roboto(size: 20, weight: .bold)
     
-    public static let themeHeadline1: Font = .roboto(size: 22, weight: .semibold)
-    public static let themeHeadline2: Font = .roboto(size: 17, weight: .semibold)
+    public static let themeHeadline1: Font = .roboto(size: 22, weight: .medium)
+    public static let themeHeadline2: Font = .roboto(size: 17, weight: .medium)
     
     public static let themeBody: Font = .roboto(size: 17, weight: .regular)
     
-    public static let themeSubhead1: Font = .roboto(size: 14, weight: .semibold)
+    public static let themeSubhead1: Font = .roboto(size: 14, weight: .medium)
     public static let themeSubhead1I: Font = .robotoItalic(size: 14)
     public static let themeSubhead2: Font = .roboto(size: 14, weight: .regular)
     
     public static let themeCaption: Font = .roboto(size: 12, weight: .regular)
-    public static let themeCaptionSB: Font = .roboto(size: 12, weight: .semibold)
+    public static let themeCaptionM: Font = .roboto(size: 12, weight: .medium)
     
     public static let themeMicro: Font = .roboto(size: 10, weight: .regular)
-    public static let themeMicroSB: Font = .roboto(size: 10, weight: .semibold)
+    public static let themeMicroM: Font = .roboto(size: 10, weight: .medium)
 }
 
 extension Font {
@@ -65,20 +65,20 @@ extension UIFont {
     public static let title3: UIFont = .roboto(size: 22, weight: .bold)
     public static let title4: UIFont = .roboto(size: 20, weight: .bold)
     
-    public static let headline1: UIFont = .roboto(size: 22, weight: .semibold)
-    public static let headline2: UIFont = .roboto(size: 17, weight: .semibold)
+    public static let headline1: UIFont = .roboto(size: 22, weight: .medium)
+    public static let headline2: UIFont = .roboto(size: 17, weight: .medium)
     
     public static let body: UIFont = .roboto(size: 17, weight: .regular)
     
-    public static let subhead1: UIFont = .roboto(size: 14, weight: .semibold)
+    public static let subhead1: UIFont = .roboto(size: 14, weight: .medium)
     public static let subhead1I: UIFont = .robotoItalic(size: 14)
     public static let subhead2: UIFont = .roboto(size: 14, weight: .regular)
     
     public static let caption: UIFont = .roboto(size: 12, weight: .regular)
-    public static let captionSB: UIFont = .roboto(size: 12, weight: .semibold)
+    public static let captionM: UIFont = .roboto(size: 12, weight: .medium)
     
     public static let micro: UIFont = .roboto(size: 10, weight: .regular)
-    public static let microSB: UIFont = .roboto(size: 10, weight: .semibold)
+    public static let microM: UIFont = .roboto(size: 10, weight: .medium)
 }
 
 extension UIFont {

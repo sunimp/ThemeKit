@@ -24,9 +24,9 @@ struct FontsView: View {
         CustomFont(name: "subhead1I", font: .themeSubhead1I),
         CustomFont(name: "subhead2", font: .themeSubhead2),
         CustomFont(name: "caption", font: .themeCaption),
-        CustomFont(name: "captionSB", font: .themeCaptionSB),
+        CustomFont(name: "captionSB", font: .themeCaptionM),
         CustomFont(name: "micro", font: .themeMicro),
-        CustomFont(name: "microSB", font: .themeMicroSB),
+        CustomFont(name: "microSB", font: .themeMicroM),
     ]
 
     var body: some View {
