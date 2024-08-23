@@ -97,18 +97,37 @@ struct ColorsView: View {
     ]
 
     var body: some View {
-        List {
-            ForEach(groupingColors, id: \.group) { grouping in
-                Section(header: Text(grouping.group.title)) {
-                    ForEach(grouping.colors, id: \.name) { color in
-                        ColorRow(name: color.name, color: color.color)
+        if #available(iOS 16.0, *) {
+            List {
+                ForEach(groupingColors, id: \.group) { grouping in
+                    Section(header: Text(grouping.group.title)) {
+                        ForEach(grouping.colors, id: \.name) { color in
+                            ColorRow(name: color.name, color: color.color)
+                        }
                     }
                 }
             }
-        }
-        .toolbar {
-            Button(currentMode) {
-                onTapToggle()
+            .scrollContentBackground(.hidden)
+            .toolbar {
+                Button(currentMode) {
+                    onTapToggle()
+                }
+            }
+        } else {
+            List {
+                ForEach(groupingColors, id: \.group) { grouping in
+                    Section(header: Text(grouping.group.title)) {
+                        ForEach(grouping.colors, id: \.name) { color in
+                            ColorRow(name: color.name, color: color.color)
+                        }
+                    }
+                }
+            }
+            .background(Color.clear)
+            .toolbar {
+                Button(currentMode) {
+                    onTapToggle()
+                }
             }
         }
     }
@@ -121,15 +140,15 @@ struct ColorsView: View {
 
         if themeModeIterator == 0 {
             ThemeManager.shared.themeMode = .system
-            UIApplication.shared.windows.first(where: \.isKeyWindow)?.overrideUserInterfaceStyle = .unspecified
+            UIApplication.shared.activeWindow?.overrideUserInterfaceStyle = .unspecified
         }
         if themeModeIterator == 1 {
             ThemeManager.shared.themeMode = .dark
-            UIApplication.shared.windows.first(where: \.isKeyWindow)?.overrideUserInterfaceStyle = .dark
+            UIApplication.shared.activeWindow?.overrideUserInterfaceStyle = .dark
         }
         if themeModeIterator == 2 {
             ThemeManager.shared.themeMode = .light
-            UIApplication.shared.windows.first(where: \.isKeyWindow)?.overrideUserInterfaceStyle = .light
+            UIApplication.shared.activeWindow?.overrideUserInterfaceStyle = .light
         }
 
         currentMode = ThemeManager.shared.themeMode.rawValue

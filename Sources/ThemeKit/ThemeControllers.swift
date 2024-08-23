@@ -14,16 +14,17 @@ extension ThemeTabBarController: IDeinitDelegate {}
 extension ThemeViewController: IDeinitDelegate {}
 
 open class ThemeNavigationController: UINavigationController {
-    public var onDeinit: (() -> ())?
-
+    
+    public var onDeinit: (() -> Void)?
+    
     override public init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
         commonInit()
     }
 
+    @available(*, unavailable)
     required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
+        fatalError("init(coder:) has not been implemented")
     }
 
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -35,9 +36,18 @@ open class ThemeNavigationController: UINavigationController {
         navigationBar.prefersLargeTitles = true
         navigationBar.tintColor = .cg005
     }
-
-    deinit {
-        onDeinit?()
+    
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if let top = self.topViewController, top.supportedInterfaceOrientations == .all {
+            if top.presentedViewController != nil {
+                return .portrait
+            }
+        }
+        return self.topViewController?.supportedInterfaceOrientations ?? .portrait
+    }
+    
+    override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        topViewController?.preferredInterfaceOrientationForPresentation ?? .portrait
     }
 
     override open var childForStatusBarStyle: UIViewController? {
@@ -49,11 +59,18 @@ open class ThemeNavigationController: UINavigationController {
     }
 
     override open var preferredStatusBarStyle: UIStatusBarStyle {
-        topViewController?.preferredStatusBarStyle ?? .themeDefault
+        if let vc = self.presentedViewController {
+            return vc.preferredStatusBarStyle
+        }
+        return topViewController?.preferredStatusBarStyle ?? .themeDefault
     }
 
     override open var prefersStatusBarHidden: Bool {
         topViewController?.prefersStatusBarHidden ?? false
+    }
+    
+    override open var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        self.topViewController?.preferredStatusBarUpdateAnimation ?? .none
     }
 
     open override func viewWillAppear(_ animated: Bool) {
@@ -65,36 +82,89 @@ open class ThemeNavigationController: UINavigationController {
             }
         }
     }
+    
+    deinit {
+        onDeinit?()
+    }
 }
 
-open class ThemeTabBarController: UITabBarController {
-    public var onDeinit: (() -> ())?
-
+open class ThemeTabBarController: UITabBarController, ThemeTabBarDelegate {
+    
+    public typealias ShouldHijackHandler = (
+        _ tabBarController: ThemeTabBarController,
+        _ viewController: UIViewController,
+        _ index: Int
+    ) -> Bool
+    
+    public typealias HijackedHandler = (
+        _ tabBarController: ThemeTabBarController,
+        _ viewController: UIViewController,
+        _ index: Int
+    ) -> Void
+    
+    private var ignoreNextSelect: Bool = false
+    
+    public var shouldHijackHandler: ShouldHijackHandler?
+    
+    public var hijackedHandler: HijackedHandler?
+    
+    public var onDeinit: (() -> Void)?
+    
+    private lazy var themeTabBar = { () -> ThemeTabBar in
+        let tabBar = ThemeTabBar()
+        tabBar.delegate = self
+        tabBar.customDelegate = self
+        tabBar.tabBarController = self
+        return tabBar
+    }()
+    
+    override open var selectedViewController: UIViewController? {
+        willSet {
+            guard let newValue = newValue else {
+                return
+            }
+            guard !ignoreNextSelect else {
+                ignoreNextSelect = false
+                return
+            }
+            guard let tabBar = self.tabBar as? ThemeTabBar,
+                  let index = viewControllers?.firstIndex(of: newValue) else {
+                return
+            }
+            tabBar.select(itemAtIndex: index, animated: false)
+        }
+    }
+    
+    override open var selectedIndex: Int {
+        willSet {
+            guard !ignoreNextSelect else {
+                ignoreNextSelect = false
+                return
+            }
+            guard let tabBar = self.tabBar as? ThemeTabBar else {
+                return
+            }
+            tabBar.select(itemAtIndex: newValue, animated: false)
+        }
+    }
+    
+    override open var preferredStatusBarStyle: UIStatusBarStyle {
+        .themeDefault
+    }
+    
     public init() {
         super.init(nibName: nil, bundle: nil)
     }
 
-    deinit {
-        onDeinit?()
-    }
-
+    @available(*, unavailable)
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     override open func viewDidLoad() {
         super.viewDidLoad()
-
-        tabBar.shadowImage = UIImage()
-        let separator = UIView(frame: CGRect(x: 0, y: 0, width: 10000, height: 1 / UIScreen.main.scale))
-        separator.backgroundColor = .zx005
-        tabBar.addSubview(separator)
-
-        tabBar.barTintColor = .clear
-
-        tabBar.tintColor = .cg005
-        tabBar.unselectedItemTintColor = .zx003
-
+        
+        self.setValue(themeTabBar, forKey: "tabBar")
         updateUITheme()
     }
 
@@ -103,34 +173,77 @@ open class ThemeTabBarController: UITabBarController {
 
         tabBar.superview?.setNeedsLayout()
     }
-
-    override open var preferredStatusBarStyle: UIStatusBarStyle {
-        .themeDefault
+    
+    override open func tabBar(_ tabBar: UITabBar, willBeginCustomizing items: [UITabBarItem]) {
+        if let tabBar = tabBar as? ThemeTabBar {
+            tabBar.updateLayout()
+        }
     }
-
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    
+    override open func tabBar(_ tabBar: UITabBar, didEndCustomizing items: [UITabBarItem], changed: Bool) {
+        if let tabBar = tabBar as? ThemeTabBar {
+            tabBar.updateLayout()
+        }
+    }
+    
+    override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-
+        
         updateUITheme()
+    }
+    
+    override open func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        guard let idx = tabBar.items?.firstIndex(of: item) else {
+            return
+        }
+        if let vc = viewControllers?[idx] {
+            ignoreNextSelect = true
+            selectedIndex = idx
+            delegate?.tabBarController?(self, didSelect: vc)
+        }
+    }
+    
+    func tabBar(_ tabBar: UITabBar, shouldSelect item: UITabBarItem) -> Bool {
+        if let idx = tabBar.items?.firstIndex(of: item), let vc = viewControllers?[idx] {
+            return delegate?.tabBarController?(self, shouldSelect: vc) ?? true
+        }
+        return true
+    }
+    
+    func tabBar(_ tabBar: UITabBar, shouldHijack item: UITabBarItem) -> Bool {
+        if let idx = tabBar.items?.firstIndex(of: item), let vc = viewControllers?[idx] {
+            return shouldHijackHandler?(self, vc, idx) ?? false
+        }
+        return false
+    }
+    
+    func tabBar(_ tabBar: UITabBar, didHijack item: UITabBarItem) {
+        if let idx = tabBar.items?.firstIndex(of: item), let vc = viewControllers?[idx] {
+            hijackedHandler?(self, vc, idx)
+        }
     }
 
     private func updateUITheme() {
-        tabBar.backgroundImage = UIImage(color: .zx009)
-    }
-
-}
-
-open class ThemeViewController: UIViewController {
-    public var onDeinit: (() -> ())?
-
-    public init() {
-        super.init(nibName: nil, bundle: nil)
+        tabBar.shadowImage = UIImage()
+        tabBar.backgroundImage = UIImage()
+        themeTabBar.updateAppearance()
     }
 
     deinit {
         onDeinit?()
     }
 
+}
+
+open class ThemeViewController: UIViewController {
+    
+    public var onDeinit: (() -> Void)?
+
+    public init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -143,6 +256,10 @@ open class ThemeViewController: UIViewController {
 
     override open var preferredStatusBarStyle: UIStatusBarStyle {
         .themeDefault
+    }
+
+    deinit {
+        onDeinit?()
     }
 
 }

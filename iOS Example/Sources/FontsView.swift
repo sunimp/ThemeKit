@@ -30,8 +30,16 @@ struct FontsView: View {
     ]
 
     var body: some View {
-        List(customFonts, id: \.name) { customFont in
-            FontRow(name: customFont.name, font: customFont.font)
+        if #available(iOS 16.0, *) {
+            List(customFonts, id: \.name) { customFont in
+                FontRow(name: customFont.name, font: customFont.font)
+            }
+            .scrollContentBackground(.hidden)
+        } else {
+            List(customFonts, id: \.name) { customFont in
+                FontRow(name: customFont.name, font: customFont.font)
+            }
+            .background(Color.clear)
         }
     }
 
