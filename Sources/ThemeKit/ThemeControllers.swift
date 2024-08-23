@@ -19,6 +19,8 @@ open class ThemeNavigationController: UINavigationController {
     
     override public init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
+        
+        self.tabBarItem = rootViewController.tabBarItem
         commonInit()
     }
 
@@ -35,6 +37,7 @@ open class ThemeNavigationController: UINavigationController {
     private func commonInit() {
         navigationBar.prefersLargeTitles = true
         navigationBar.tintColor = .cg005
+        updateUITheme()
     }
     
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -81,6 +84,16 @@ open class ThemeNavigationController: UINavigationController {
                 self.navigationBar.sizeToFit()
             }
         }
+    }
+    
+    override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        updateUITheme()
+    }
+    
+    private func updateUITheme() {
+        navigationBar.shadowImage = UIImage()
     }
     
     deinit {

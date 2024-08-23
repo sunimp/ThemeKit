@@ -23,24 +23,20 @@ class MainViewController: ThemeTabBarController {
         
         colorsVC.title = "Colors"
         colorsVC.view.backgroundColor = .clear
-        
-        fontsVC.title = "Fonts"
-        fontsVC.view.backgroundColor = .clear
-        
-        let colorsNav = ThemeNavigationController(rootViewController: colorsVC)
-        let fontsNav = ThemeNavigationController(rootViewController: fontsVC)
-        
-        colorsNav.tabBarItem = ThemeTabBarItem(
+        colorsVC.tabBarItem = ThemeTabBarItem(
             title: "Colors",
             image: UIImage(systemName: "paintpalette")?.withRenderingMode(.alwaysTemplate)
         )
-        fontsNav.tabBarItem = ThemeTabBarItem(
+        
+        fontsVC.title = "Fonts"
+        fontsVC.view.backgroundColor = .clear
+        fontsVC.tabBarItem = ThemeTabBarItem(
             title: "Fonts",
             image: UIImage(systemName: "textformat")?.withRenderingMode(.alwaysTemplate)
         )
         let viewControllers: [UIViewController] = [
-            colorsNav,
-            fontsNav
+            ThemeNavigationController(rootViewController: colorsVC),
+            ThemeNavigationController(rootViewController: fontsVC)
         ]
         setViewControllers(viewControllers, animated: false)
     }
