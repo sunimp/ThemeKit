@@ -12,16 +12,16 @@ open class ThemeWindow: UIWindow {
     
     private var cancellables = Set<AnyCancellable>()
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-
+    public override init(windowScene: UIWindowScene) {
+        super.init(windowScene: windowScene)
+        
         update(themeMode: ThemeManager.shared.themeMode)
-
+        
         ThemeManager.shared.$themeMode
-                .sink { [weak self] themeMode in
-                    self?.update(themeMode: themeMode)
-                }
-                .store(in: &cancellables)
+            .sink { [weak self] themeMode in
+                self?.update(themeMode: themeMode)
+            }
+            .store(in: &cancellables)
     }
 
     @available(*, unavailable)

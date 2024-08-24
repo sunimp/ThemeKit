@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3A39D0972755E5FC0022CB8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A39D0952755E5FC0022CB8B /* AppDelegate.swift */; };
 		A48C64262C78385F000E3EE2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C64252C78385F000E3EE2 /* MainViewController.swift */; };
-		A48C642B2C783E0B000E3EE2 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = A48C642A2C783E0B000E3EE2 /* LookinServer */; };
 		D31D685E2A05225100D03E2F /* ColorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31D685D2A05225100D03E2F /* ColorsView.swift */; };
 		D31D68622A0B913400D03E2F /* FontsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31D68612A0B913400D03E2F /* FontsView.swift */; };
 		D3500A3628EEE8960093A369 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3500A3528EEE8960093A369 /* SnapKit */; };
@@ -33,7 +32,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D945030C261F99CC00F6BF2E /* ThemeKit in Frameworks */,
-				A48C642B2C783E0B000E3EE2 /* LookinServer in Frameworks */,
 				D3500A3628EEE8960093A369 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,7 +95,6 @@
 			packageProductDependencies = (
 				D945030B261F99CC00F6BF2E /* ThemeKit */,
 				D3500A3528EEE8960093A369 /* SnapKit */,
-				A48C642A2C783E0B000E3EE2 /* LookinServer */,
 			);
 			productName = "iOS Example";
 			productReference = D94502F5261F98A400F6BF2E /* ThemeKit Demo.app */;
@@ -130,7 +127,6 @@
 			mainGroup = D94502EC261F98A400F6BF2E;
 			packageReferences = (
 				D3500A3428EEE8960093A369 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				A48C64292C783E0B000E3EE2 /* XCRemoteSwiftPackageReference "LookinServer" */,
 			);
 			productRefGroup = D94502F6261F98A400F6BF2E /* Products */;
 			projectDirPath = "";
@@ -360,14 +356,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A48C64292C783E0B000E3EE2 /* XCRemoteSwiftPackageReference "LookinServer" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/QMUI/LookinServer/";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.8;
-			};
-		};
 		D3500A3428EEE8960093A369 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -379,11 +367,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A48C642A2C783E0B000E3EE2 /* LookinServer */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A48C64292C783E0B000E3EE2 /* XCRemoteSwiftPackageReference "LookinServer" */;
-			productName = LookinServer;
-		};
 		D3500A3528EEE8960093A369 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D3500A3428EEE8960093A369 /* XCRemoteSwiftPackageReference "SnapKit" */;
