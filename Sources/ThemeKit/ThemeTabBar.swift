@@ -7,6 +7,8 @@
 
 import UIKit
 
+import UIExtensions
+
 protocol ThemeTabBarDelegate: AnyObject {
     
     func tabBar(_ tabBar: UITabBar, shouldSelect item: UITabBarItem) -> Bool
@@ -31,38 +33,6 @@ open class ThemeTabBar: UITabBar {
     override open var items: [UITabBarItem]? {
         didSet {
             self.rebuild()
-        }
-    }
-    
-    open var shadowColor: UIColor? = .zx010.alpha(0.05) {
-        didSet {
-            if oldValue != shadowColor {
-                self.updateAppearance()
-            }
-        }
-    }
-    
-    open var shadowOffset: CGSize = .zero {
-        didSet {
-            if oldValue != shadowOffset {
-                self.updateAppearance()
-            }
-        }
-    }
-   
-    open var shadowRadius: CGFloat = 10 {
-        didSet {
-            if oldValue != shadowRadius {
-                self.updateAppearance()
-            }
-        }
-    }
-    
-    open var shadowOpacity: Float = 1.0 {
-        didSet {
-            if oldValue != shadowOpacity {
-                self.updateAppearance()
-            }
         }
     }
     
@@ -152,7 +122,7 @@ open class ThemeTabBar: UITabBar {
     }
     
     func updateAppearance() {
-        updateShadows()
+        setShadow(color: .zx010.alpha(0.05), position: .all(10), opacity: 1.0)
         
         if Theme.current.statusBarStyle == .lightContent {
             effectView.effect = UIBlurEffect(style: .dark)
@@ -197,19 +167,6 @@ open class ThemeTabBar: UITabBar {
         }
         
         self.setNeedsLayout()
-    }
-    
-    private func updateShadows() {
-        guard let shadowColor = shadowColor, shadowRadius > 0 else {
-            layer.shadowColor = nil
-            layer.shadowRadius = 0
-            return
-        }
-        
-        layer.shadowColor = shadowColor.cgColor
-        layer.shadowOffset = shadowOffset
-        layer.shadowRadius = shadowRadius
-        layer.shadowOpacity = shadowOpacity
     }
     
     @objc
