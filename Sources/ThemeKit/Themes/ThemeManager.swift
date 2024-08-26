@@ -56,26 +56,29 @@ public class Theme {
         ThemeManager.shared.currentTheme
     }
 
-    public static func updateNavigationBarTheme() {
+    public static func updateNavigationBarTheme(
+        _ backgroundColor: UIColor = .zx009,
+        textColor: UIColor = .zx001
+    ) {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithTransparentBackground()
         standardAppearance.shadowColor = .clear
         standardAppearance.shadowImage = UIImage()
-        standardAppearance.backgroundColor = .zx009
+        standardAppearance.backgroundColor = backgroundColor
         standardAppearance.backgroundImage = UIImage()
-        standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.zx001]
-        standardAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.zx001]
+        standardAppearance.titleTextAttributes = [.foregroundColor: textColor]
+        standardAppearance.largeTitleTextAttributes = [.foregroundColor: textColor]
 
         UINavigationBar.appearance().standardAppearance = standardAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = standardAppearance
     }
     
-    public static func updateTabBarTheme() {
+    public static func updateTabBarTheme(_ backgroundColor: UIColor = .zx009) {
         let standardAppearance = UITabBarAppearance()
         standardAppearance.configureWithTransparentBackground()
         standardAppearance.shadowColor = .clear
         standardAppearance.shadowImage = UIImage()
-        standardAppearance.backgroundColor = .zx009
+        standardAppearance.backgroundColor = backgroundColor
         standardAppearance.backgroundImage = UIImage()
         
         UITabBar.appearance().standardAppearance = standardAppearance

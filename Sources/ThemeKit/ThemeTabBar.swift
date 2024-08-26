@@ -123,8 +123,7 @@ open class ThemeTabBar: UITabBar {
     
     func updateAppearance() {
         setShadow(color: .zx010.alpha(0.05), position: .all(10), opacity: 1.0)
-        
-        if Theme.current.statusBarStyle == .lightContent {
+        if Theme.current.isDark {
             effectView.effect = UIBlurEffect(style: .dark)
         } else {
             effectView.effect = UIBlurEffect(style: .light)
