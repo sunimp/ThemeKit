@@ -264,7 +264,7 @@ open class ThemeViewController: UIViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .zx009
+        view.backgroundColor = Theme.current.isDark ? .zx009 : .zx008
     }
 
     override open var preferredStatusBarStyle: UIStatusBarStyle {
