@@ -40,10 +40,23 @@ class MainViewController: ThemeTabBarController {
         fontsItem.badgeColor = .cg002
         fontsItem.badgeValue = "87"
         fontsVC.tabBarItem = fontsItem
+        
+        let settingsVC = UIViewController(nibName: nil, bundle: nil)
+        settingsVC.title = "Settings"
+        settingsVC.view.backgroundColor = .clear
+        let settingsItem = ThemeTabBarItem(
+            title: "Settings",
+            image: UIImage(systemName: "gearshape")?.withRenderingMode(.alwaysTemplate)
+        )
+        settingsItem.isEnabled = false
+        settingsVC.tabBarItem = settingsItem
+        
         let viewControllers: [UIViewController] = [
             ThemeNavigationController(rootViewController: colorsVC),
-            ThemeNavigationController(rootViewController: fontsVC)
+            ThemeNavigationController(rootViewController: fontsVC),
+            ThemeNavigationController(rootViewController: settingsVC)
         ]
+        
         setViewControllers(viewControllers, animated: false)
     }
 }

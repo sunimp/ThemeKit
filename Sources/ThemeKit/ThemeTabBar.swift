@@ -311,6 +311,11 @@ open class ThemeTabBarItem: UITabBarItem {
         set { self.contentView.selectedTextColor = newValue }
     }
     
+    open var disabledTextColor: UIColor {
+        get { contentView.disabledTextColor }
+        set { self.contentView.disabledTextColor = newValue }
+    }
+    
     open var titleFont: UIFont {
         get { contentView.titleFont }
         set { self.contentView.titleFont = newValue }
@@ -325,6 +330,16 @@ open class ThemeTabBarItem: UITabBarItem {
         didSet { self.contentView.image = image }
     }
     
+    override open var selectedImage: UIImage? {
+        get { return contentView.selectedImage }
+        set { contentView.selectedImage = newValue }
+    }
+    
+    open var disabledImage: UIImage? {
+        get { return contentView.disabledImage }
+        set { contentView.disabledImage = newValue }
+    }
+    
     open var imageSize: CGSize? {
         get { return contentView.imageSize }
         set { contentView.imageSize = newValue }
@@ -335,9 +350,9 @@ open class ThemeTabBarItem: UITabBarItem {
         set { contentView.selectedImageSize = newValue }
     }
     
-    override open var selectedImage: UIImage? {
-        get { return contentView.selectedImage }
-        set { contentView.selectedImage = newValue }
+    open var disabledImageSize: CGSize? {
+        get { return contentView.disabledImageSize }
+        set { contentView.disabledImageSize = newValue }
     }
     
     open var imageColor: UIColor {
@@ -345,9 +360,14 @@ open class ThemeTabBarItem: UITabBarItem {
         set { self.contentView.imageColor = newValue }
     }
     
-    open var highlightedImageColor: UIColor {
+    open var selectedImageColor: UIColor {
         get { contentView.selectedImageColor }
         set { self.contentView.selectedImageColor = newValue }
+    }
+    
+    open var disabledImageColor: UIColor {
+        get { contentView.disabledImageColor }
+        set { self.contentView.disabledImageColor = newValue }
     }
     
     open var backdropColor: UIColor {
@@ -355,9 +375,14 @@ open class ThemeTabBarItem: UITabBarItem {
         set { self.contentView.backdropColor = newValue }
     }
     
-    open var highlightedBackdropColor: UIColor {
+    open var selectedBackdropColor: UIColor {
         get { contentView.selectedBackdropColor }
         set { self.contentView.selectedBackdropColor = newValue }
+    }
+    
+    open var disabledBackdropColor: UIColor {
+        get { contentView.disabledBackdropColor }
+        set { self.contentView.disabledBackdropColor = newValue }
     }
     
     override open var badgeValue: String? {
@@ -483,13 +508,23 @@ open class ThemeTabBarItemContentView: UIView {
         }
     }
     
-    open var isEnabled = true
+    open var disabledImage: UIImage? {
+        didSet {
+            if !isEnabled { self.updateAppearance() }
+        }
+    }
+    
+    open var isEnabled = true {
+        didSet {
+            self.updateAppearance()
+        }
+    }
     
     open var isSelected = false
     
     open var isHighlighted = false
     
-    open var textColor: UIColor = .zx003 {
+    open var textColor: UIColor = .zx002 {
         didSet {
             if !isSelected { titleLabel.textColor = textColor }
         }
@@ -498,6 +533,12 @@ open class ThemeTabBarItemContentView: UIView {
     open var selectedTextColor: UIColor = .cg005 {
         didSet {
             if isSelected { titleLabel.textColor = selectedTextColor }
+        }
+    }
+    
+    open var disabledTextColor: UIColor = .zx004 {
+        didSet {
+            if !isEnabled { titleLabel.textColor = disabledTextColor }
         }
     }
 
@@ -517,7 +558,7 @@ open class ThemeTabBarItemContentView: UIView {
         }
     }
     
-    open var imageColor: UIColor = .zx003 {
+    open var imageColor: UIColor = .zx002 {
         didSet {
             if !isSelected { imageView.image = image?.tint(imageColor) }
         }
@@ -529,6 +570,12 @@ open class ThemeTabBarItemContentView: UIView {
         }
     }
     
+    open var disabledImageColor: UIColor = .zx004 {
+        didSet {
+            if !isEnabled { imageView.image = image?.tint(disabledImageColor) }
+        }
+    }
+    
     open var imageSize: CGSize? {
         didSet {
             if imageSize != oldValue {
@@ -537,9 +584,17 @@ open class ThemeTabBarItemContentView: UIView {
         }
     }
     
-    open var selectedImageSize: CGSize?{
+    open var selectedImageSize: CGSize? {
         didSet {
-            if imageSize != oldValue {
+            if selectedImageSize != oldValue {
+                self.updateLayout()
+            }
+        }
+    }
+    
+    open var disabledImageSize: CGSize? {
+        didSet {
+            if disabledImageSize != oldValue {
                 self.updateLayout()
             }
         }
@@ -554,6 +609,12 @@ open class ThemeTabBarItemContentView: UIView {
     open var selectedBackdropColor: UIColor = .clear {
         didSet {
             if isSelected { backgroundColor = selectedBackdropColor }
+        }
+    }
+    
+    open var disabledBackdropColor: UIColor = .clear {
+        didSet {
+            if !isEnabled { backgroundColor = disabledBackdropColor }
         }
     }
     
@@ -655,17 +716,26 @@ open class ThemeTabBarItemContentView: UIView {
     
     open func updateAppearance() {
         var selectedImage = (self.selectedImage ?? self.image)?.tint(self.selectedImageColor)
-        if let selectedImageSize {
+        if let selectedImageSize = self.selectedImageSize {
             selectedImage = selectedImage?.resize(selectedImageSize)
         }
         var normalImage = self.image?.tint(self.imageColor)
-        if let imageSize {
+        if let imageSize = self.imageSize {
             normalImage = normalImage?.resize(imageSize)
         }
-        
-        self.imageView.image = self.isSelected ? selectedImage : normalImage
-        self.titleLabel.textColor = self.isSelected ? self.selectedTextColor : self.textColor
-        self.backgroundColor = self.isSelected ? self.selectedBackdropColor : self.backdropColor
+        var disabledImage = (self.disabledImage ?? self.image)?.tint(self.disabledImageColor)
+        if let disabledImageSize = self.disabledImageSize {
+            disabledImage = disabledImage?.resize(disabledImageSize)
+        }
+        if self.isEnabled {
+            self.imageView.image = self.isSelected ? selectedImage : normalImage
+            self.titleLabel.textColor = self.isSelected ? self.selectedTextColor : self.textColor
+            self.backgroundColor = self.isSelected ? self.selectedBackdropColor : self.backdropColor
+        } else {
+            self.imageView.image = disabledImage
+            self.titleLabel.textColor = self.disabledTextColor
+            self.backgroundColor = self.disabledBackdropColor
+        }
     }
     
     open func updateLayout() {
