@@ -609,7 +609,7 @@ open class ThemeTabBarItemContentView: UIView {
             if let color = badgeColor {
                 self.badgeView.badgeColor = color
             } else {
-                self.badgeView.badgeColor = .fz001
+                self.badgeView.badgeColor = .cg002
             }
         }
     }
@@ -627,7 +627,7 @@ open class ThemeTabBarItemContentView: UIView {
         }
     }
     
-    open var badgeOffset: UIOffset = UIOffset(horizontal: 6.0, vertical: -16.0) {
+    open var badgeOffset: UIOffset = UIOffset(horizontal: 8.0, vertical: -20.0) {
         didSet {
             if badgeOffset != oldValue {
                 self.updateLayout()
@@ -804,7 +804,7 @@ open class ThemeTabBarItemContentView: UIView {
 
 open class ThemeTabBarItemBadgeView: UIView {
     
-    open var badgeColor: UIColor? = .fz001 {
+    open var badgeColor: UIColor? = .cg002 {
         didSet {
             imageView.backgroundColor = badgeColor
         }
@@ -825,7 +825,7 @@ open class ThemeTabBarItemBadgeView: UIView {
     open var badgeLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = .caption
+        label.font = .microM
         label.textColor = .zx017
         label.backgroundColor = .clear
         return label
@@ -859,10 +859,12 @@ open class ThemeTabBarItemBadgeView: UIView {
         badgeLabel.isHidden = false
         
         if badgeValue.isEmpty {
-            imageView.frame = CGRect(x: (bounds.width - 6.0) / 2.0,
-                                     y: (bounds.height - 6.0) / 2.0,
-                                     width: 6,
-                                     height: 6)
+            imageView.frame = CGRect(
+                x: (bounds.width - 8.0) / 2.0,
+                y: (bounds.height - 8.0) / 2.0,
+                width: 8,
+                height: 8
+            )
         } else {
             imageView.frame = bounds
         }
@@ -873,10 +875,14 @@ open class ThemeTabBarItemBadgeView: UIView {
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
         guard badgeValue != nil else {
-            return CGSize(width: 10.0, height: 10.0)
+            return CGSize(width: 12, height: 12)
         }
-        let textSize = badgeLabel.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude,
-                                                      height: CGFloat.greatestFiniteMagnitude))
-        return CGSize(width: max(10.0, textSize.width + 10.0), height: 10.0)
+        let textSize = badgeLabel.sizeThatFits(
+            CGSize(
+                width: CGFloat.greatestFiniteMagnitude,
+                height: CGFloat.greatestFiniteMagnitude
+            )
+        )
+        return CGSize(width: max(12.0, textSize.width + 10.0), height: 12.0)
     }
 }
