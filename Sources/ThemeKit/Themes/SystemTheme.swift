@@ -8,6 +8,22 @@
 import UIKit
 
 class SystemTheme: ITheme {
+    
+    var isLight: Bool {
+        !isDark
+    }
+    
+    var isDark: Bool {
+        switch UITraitCollection.current.userInterfaceStyle {
+        case .dark:
+            return true
+        case .unspecified:
+            return UIWindow.keyWindow?.overrideUserInterfaceStyle == .dark
+        default:
+            return false
+        }
+    }
+    
     var hudBlurStyle: UIBlurEffect.Style { UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight }
     var keyboardAppearance: UIKeyboardAppearance { .default }
     var statusBarStyle: UIStatusBarStyle { .default }
