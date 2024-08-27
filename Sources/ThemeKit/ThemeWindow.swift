@@ -5,14 +5,14 @@
 //  Created by Sun on 2024/8/19.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 open class ThemeWindow: UIWindow {
     
     private var cancellables = Set<AnyCancellable>()
 
-    public override init(windowScene: UIWindowScene) {
+    override public init(windowScene: UIWindowScene) {
         super.init(windowScene: windowScene)
         
         update(themeMode: ThemeManager.shared.themeMode)
@@ -25,12 +25,12 @@ open class ThemeWindow: UIWindow {
     }
 
     @available(*, unavailable)
-    required public init?(coder aDecoder: NSCoder) {
+    public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     private func update(themeMode: ThemeMode) {
-        UIView.transition (with: self, duration: 0.5, options: .transitionCrossDissolve, animations: {
+        UIView.transition(with: self, duration: 0.5, options: .transitionCrossDissolve, animations: {
             switch themeMode {
             case .system:
                 self.overrideUserInterfaceStyle = .unspecified

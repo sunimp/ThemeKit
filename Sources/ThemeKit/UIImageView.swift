@@ -22,7 +22,7 @@ extension UIImageView {
         }
     }
 
-    public func setImage(withUrlString urlString: String, placeholder: UIImage?) {
+    public func setImage(withURLString urlString: String, placeholder: UIImage?) {
         kf.setImage(with: URL(string: urlString), placeholder: placeholder, options: [.scaleFactor(UIScreen.main.scale)])
     }
 

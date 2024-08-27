@@ -9,6 +9,8 @@ import UIKit
 
 import UIExtensions
 
+// MARK: - ThemeTabBarDelegate
+
 protocol ThemeTabBarDelegate: AnyObject {
     
     func tabBar(_ tabBar: UITabBar, shouldSelect item: UITabBarItem) -> Bool
@@ -17,6 +19,8 @@ protocol ThemeTabBarDelegate: AnyObject {
     
     func tabBar(_ tabBar: UITabBar, didHijack item: UITabBarItem)
 }
+
+// MARK: - ThemeTabBar
 
 open class ThemeTabBar: UITabBar {
     
@@ -32,41 +36,43 @@ open class ThemeTabBar: UITabBar {
     
     override open var items: [UITabBarItem]? {
         didSet {
-            self.rebuild()
+            rebuild()
         }
     }
     
     override open func setItems(_ items: [UITabBarItem]?, animated: Bool) {
         super.setItems(items, animated: animated)
-        self.rebuild()
+        rebuild()
     }
     
     override open func layoutSubviews() {
         super.layoutSubviews()
         
-        self.updateLayout()
+        updateLayout()
     }
     
     override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         var insides = super.point(inside: point, with: event)
         if !insides {
             for container in containers
-            where container.point(
-                inside: CGPoint(x: point.x - container.frame.origin.x,
-                                y: point.y - container.frame.origin.y),
-                with: event) {
+                where container.point(
+                    inside: CGPoint(
+                        x: point.x - container.frame.origin.x,
+                        y: point.y - container.frame.origin.y
+                    ),
+                    with: event
+                )
+            {
                 insides = true
             }
-            
         }
         return insides
     }
     
     func updateLayout() {
+        effectView.frame = bounds
         
-        self.effectView.frame = self.bounds
-        
-        guard let tabBarItems = self.items else {
+        guard let tabBarItems = items else {
             return
         }
         
@@ -76,9 +82,9 @@ open class ThemeTabBar: UITabBar {
             }
             return false
         }
-            .sorted { (subview1, subview2) -> Bool in
-                return subview1.frame.origin.x < subview2.frame.origin.x
-            }
+        .sorted { subview1, subview2 -> Bool in
+            return subview1.frame.origin.x < subview2.frame.origin.x
+        }
         
         if isCustomizing {
             for idx in tabBarItems.indices {
@@ -108,12 +114,12 @@ open class ThemeTabBar: UITabBar {
         let itemSpacing = itemSpacing == 0.0 ? 0.0 : itemSpacing
         for (idx, container) in containers.enumerated() where !tabBarButtons[idx].frame.isEmpty {
             let maxHeight = bounds.height - top - itemEdgeInsets.bottom
-            let itemHeight: CGFloat
-            if tabBarButtons[idx].frame.height > maxHeight {
-                itemHeight = maxHeight
-            } else {
-                itemHeight = tabBarButtons[idx].frame.height
-            }
+            let itemHeight: CGFloat =
+                if tabBarButtons[idx].frame.height > maxHeight {
+                    maxHeight
+                } else {
+                    tabBarButtons[idx].frame.height
+                }
             
             container.frame = CGRect(x: left, y: top, width: itemWidth, height: itemHeight)
             left += itemWidth
@@ -131,7 +137,7 @@ open class ThemeTabBar: UITabBar {
         effectView.contentView.backgroundColor = .zx009.alpha(0.5)
         backgroundColor = .clear
         
-        guard let tabBarItems = self.items else {
+        guard let tabBarItems = items else {
             return
         }
         for item in tabBarItems.compactMap({ $0 as? ThemeTabBarItem }) {
@@ -149,23 +155,23 @@ open class ThemeTabBar: UITabBar {
     
     private func rebuild() {
         removeAll()
-        guard let tabBarItems = self.items else {
+        guard let tabBarItems = items else {
             return
         }
         
-        self.addSubview(self.effectView)
+        addSubview(effectView)
         
         for (idx, item) in tabBarItems.enumerated() {
             let container = ThemeTabBarItemContainer(self, tag: 1_000 + idx)
-            self.addSubview(container)
-            self.containers.append(container)
+            addSubview(container)
+            containers.append(container)
             
             if let item = item as? ThemeTabBarItem {
                 container.addSubview(item.contentView)
             }
         }
         
-        self.setNeedsLayout()
+        setNeedsLayout()
     }
     
     @objc
@@ -174,7 +180,7 @@ open class ThemeTabBar: UITabBar {
             return
         }
         let newIndex = max(0, container.tag - 1_000)
-        guard newIndex < items?.count ?? 0, let item = self.items?[newIndex], item.isEnabled == true else {
+        guard newIndex < items?.count ?? 0, let item = items?[newIndex], item.isEnabled == true else {
             return
         }
         
@@ -193,7 +199,7 @@ open class ThemeTabBar: UITabBar {
             return
         }
         let newIndex = max(0, container.tag - 1_000)
-        guard newIndex < items?.count ?? 0, let item = self.items?[newIndex], item.isEnabled == true else {
+        guard newIndex < items?.count ?? 0, let item = items?[newIndex], item.isEnabled == true else {
             return
         }
         
@@ -222,7 +228,7 @@ open class ThemeTabBar: UITabBar {
         if let selected = selectedItem {
             currentIndex = items?.firstIndex(of: selected) ?? -1
         }
-        guard newIndex < items?.count ?? 0, let item = self.items?[newIndex], item.isEnabled == true else {
+        guard newIndex < items?.count ?? 0, let item = items?[newIndex], item.isEnabled == true else {
             return
         }
         
@@ -241,7 +247,7 @@ open class ThemeTabBar: UITabBar {
         }
         
         if currentIndex != newIndex {
-            if currentIndex != -1 && currentIndex < items?.count ?? 0 {
+            if currentIndex != -1, currentIndex < items?.count ?? 0 {
                 if let currentItem = items?[currentIndex] as? ThemeTabBarItem {
                     currentItem.contentView.deselect(animated: animated, completion: nil)
                 }
@@ -254,7 +260,7 @@ open class ThemeTabBar: UITabBar {
                 item.contentView.reselect(animated: animated, completion: nil)
             }
             
-            if let tabBarController = tabBarController {
+            if let tabBarController {
                 var navigationController: UINavigationController?
                 if let naviController = tabBarController.selectedViewController as? UINavigationController {
                     navigationController = naviController
@@ -262,10 +268,12 @@ open class ThemeTabBar: UITabBar {
                     navigationController = naviController
                 }
                 
-                if let navigationController = navigationController {
+                if let navigationController {
                     if navigationController.viewControllers.contains(tabBarController) {
-                        if navigationController.viewControllers.count > 1
-                            && navigationController.viewControllers.last != tabBarController {
+                        if
+                            navigationController.viewControllers.count > 1,
+                            navigationController.viewControllers.last != tabBarController
+                        {
                             navigationController.popToViewController(tabBarController, animated: true)
                         }
                     } else {
@@ -274,7 +282,6 @@ open class ThemeTabBar: UITabBar {
                         }
                     }
                 }
-                
             }
         }
         
@@ -283,119 +290,121 @@ open class ThemeTabBar: UITabBar {
     
 }
 
+// MARK: - ThemeTabBarItem
+
 open class ThemeTabBarItem: UITabBarItem {
     
     override open var tag: Int {
-        get { self.contentView.tag }
-        set { self.contentView.tag = newValue }
+        get { contentView.tag }
+        set { contentView.tag = newValue }
     }
     
     override open var isEnabled: Bool {
-        get { self.contentView.isEnabled }
-        set { self.contentView.isEnabled = newValue }
+        get { contentView.isEnabled }
+        set { contentView.isEnabled = newValue }
     }
     
     override open var title: String? {
-        get { self.contentView.title }
-        set { self.contentView.title = newValue }
+        get { contentView.title }
+        set { contentView.title = newValue }
     }
     
     open var textColor: UIColor {
         get { contentView.textColor }
-        set { self.contentView.textColor = newValue }
+        set { contentView.textColor = newValue }
     }
     
     open var selectedTextColor: UIColor {
         get { contentView.selectedTextColor }
-        set { self.contentView.selectedTextColor = newValue }
+        set { contentView.selectedTextColor = newValue }
     }
     
     open var disabledTextColor: UIColor {
         get { contentView.disabledTextColor }
-        set { self.contentView.disabledTextColor = newValue }
+        set { contentView.disabledTextColor = newValue }
     }
     
     open var titleFont: UIFont {
         get { contentView.titleFont }
-        set { self.contentView.titleFont = newValue }
+        set { contentView.titleFont = newValue }
     }
     
     open var selectedTitleFont: UIFont? {
         get { contentView.selectedTitleFont }
-        set { self.contentView.selectedTitleFont = newValue }
+        set { contentView.selectedTitleFont = newValue }
     }
     
     override open var image: UIImage? {
-        didSet { self.contentView.image = image }
+        didSet { contentView.image = image }
     }
     
     override open var selectedImage: UIImage? {
-        get { return contentView.selectedImage }
+        get { contentView.selectedImage }
         set { contentView.selectedImage = newValue }
     }
     
     open var disabledImage: UIImage? {
-        get { return contentView.disabledImage }
+        get { contentView.disabledImage }
         set { contentView.disabledImage = newValue }
     }
     
     open var imageSize: CGSize? {
-        get { return contentView.imageSize }
+        get { contentView.imageSize }
         set { contentView.imageSize = newValue }
     }
     
     open var selectedImageSize: CGSize? {
-        get { return contentView.selectedImageSize }
+        get { contentView.selectedImageSize }
         set { contentView.selectedImageSize = newValue }
     }
     
     open var disabledImageSize: CGSize? {
-        get { return contentView.disabledImageSize }
+        get { contentView.disabledImageSize }
         set { contentView.disabledImageSize = newValue }
     }
     
     open var imageColor: UIColor {
         get { contentView.imageColor }
-        set { self.contentView.imageColor = newValue }
+        set { contentView.imageColor = newValue }
     }
     
     open var selectedImageColor: UIColor {
         get { contentView.selectedImageColor }
-        set { self.contentView.selectedImageColor = newValue }
+        set { contentView.selectedImageColor = newValue }
     }
     
     open var disabledImageColor: UIColor {
         get { contentView.disabledImageColor }
-        set { self.contentView.disabledImageColor = newValue }
+        set { contentView.disabledImageColor = newValue }
     }
     
     open var backdropColor: UIColor {
         get { contentView.backdropColor }
-        set { self.contentView.backdropColor = newValue }
+        set { contentView.backdropColor = newValue }
     }
     
     open var selectedBackdropColor: UIColor {
         get { contentView.selectedBackdropColor }
-        set { self.contentView.selectedBackdropColor = newValue }
+        set { contentView.selectedBackdropColor = newValue }
     }
     
     open var disabledBackdropColor: UIColor {
         get { contentView.disabledBackdropColor }
-        set { self.contentView.disabledBackdropColor = newValue }
+        set { contentView.disabledBackdropColor = newValue }
     }
     
     override open var badgeValue: String? {
-        get { return contentView.badgeValue }
+        get { contentView.badgeValue }
         set { contentView.badgeValue = newValue }
     }
     
     override open var titlePositionAdjustment: UIOffset {
-        get { return contentView.titlePositionAdjustment }
+        get { contentView.titlePositionAdjustment }
         set { contentView.titlePositionAdjustment = newValue }
     }
     
     override open var badgeColor: UIColor? {
-        get { return contentView.badgeColor }
+        get { contentView.badgeColor }
         set { contentView.badgeColor = newValue }
     }
     
@@ -409,10 +418,10 @@ open class ThemeTabBarItem: UITabBarItem {
         set { contentView.insets = newValue }
     }
     
-    open var contentView: ThemeTabBarItemContentView = ThemeTabBarItemContentView() {
+    open var contentView = ThemeTabBarItemContentView() {
         didSet {
-            self.contentView.updateLayout()
-            self.contentView.updateAppearance()
+            contentView.updateLayout()
+            contentView.updateAppearance()
         }
     }
     
@@ -432,40 +441,44 @@ open class ThemeTabBarItem: UITabBarItem {
     }
     
     @available(*, unavailable)
-    public required init?(coder aDecoder: NSCoder) {
+    public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     open func updateAppearance() {
-        self.contentView.updateAppearance()
+        contentView.updateAppearance()
     }
 }
+
+// MARK: - ThemeTabBarItemContainer
 
 class ThemeTabBarItemContainer: UIControl {
     
     init(_ target: AnyObject?, tag: Int) {
         super.init(frame: .zero)
         self.tag = tag
-        self.addTarget(target, action: #selector(ThemeTabBar.selectAction(_:)), for: .touchUpInside)
-        self.addTarget(target, action: #selector(ThemeTabBar.highlightedAction(_:)), for: .touchDown)
-        self.addTarget(target, action: #selector(ThemeTabBar.highlightedAction(_:)), for: .touchDragEnter)
-        self.addTarget(target, action: #selector(ThemeTabBar.unhighlightedAction(_:)), for: .touchDragExit)
-        self.backgroundColor = .clear
+        addTarget(target, action: #selector(ThemeTabBar.selectAction(_:)), for: .touchUpInside)
+        addTarget(target, action: #selector(ThemeTabBar.highlightedAction(_:)), for: .touchDown)
+        addTarget(target, action: #selector(ThemeTabBar.highlightedAction(_:)), for: .touchDragEnter)
+        addTarget(target, action: #selector(ThemeTabBar.unhighlightedAction(_:)), for: .touchDragExit)
+        backgroundColor = .clear
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) {
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        for subview in self.subviews {
+        for subview in subviews {
             if let subview = subview as? ThemeTabBarItemContentView {
-                subview.frame = CGRect(x: subview.insets.left,
-                                       y: subview.insets.top,
-                                       width: bounds.width - subview.insets.left - subview.insets.right,
-                                       height: bounds.height - subview.insets.top - subview.insets.bottom)
+                subview.frame = CGRect(
+                    x: subview.insets.left,
+                    y: subview.insets.top,
+                    width: bounds.width - subview.insets.left - subview.insets.right,
+                    height: bounds.height - subview.insets.top - subview.insets.bottom
+                )
                 subview.updateLayout()
             }
         }
@@ -474,48 +487,54 @@ class ThemeTabBarItemContainer: UIControl {
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         var insides = super.point(inside: point, with: event)
         if !insides {
-            for subview in self.subviews where
-            subview.point(
-                inside: CGPoint(x: point.x - subview.frame.origin.x,
-                                y: point.y - subview.frame.origin.y),
-                with: event) {
-                    insides = true
-                }
+            for subview in subviews where
+                subview.point(
+                    inside: CGPoint(
+                        x: point.x - subview.frame.origin.x,
+                        y: point.y - subview.frame.origin.y
+                    ),
+                    with: event
+                )
+            {
+                insides = true
+            }
         }
         return insides
     }
 }
 
+// MARK: - ThemeTabBarItemContentView
+
 open class ThemeTabBarItemContentView: UIView {
     
     open var title: String? {
         didSet {
-            self.titleLabel.text = title
-            self.updateLayout()
+            titleLabel.text = title
+            updateLayout()
         }
     }
     
     open var image: UIImage? {
         didSet {
-            if !isSelected { self.updateAppearance() }
+            if !isSelected { updateAppearance() }
         }
     }
     
     open var selectedImage: UIImage? {
         didSet {
-            if isSelected { self.updateAppearance() }
+            if isSelected { updateAppearance() }
         }
     }
     
     open var disabledImage: UIImage? {
         didSet {
-            if !isEnabled { self.updateAppearance() }
+            if !isEnabled { updateAppearance() }
         }
     }
     
     open var isEnabled = true {
         didSet {
-            self.updateAppearance()
+            updateAppearance()
         }
     }
     
@@ -544,7 +563,7 @@ open class ThemeTabBarItemContentView: UIView {
     open var titleFont: UIFont = .captionM {
         didSet {
             if titleFont != oldValue {
-                self.updateLayout()
+                updateLayout()
             }
         }
     }
@@ -552,7 +571,7 @@ open class ThemeTabBarItemContentView: UIView {
     open var selectedTitleFont: UIFont? {
         didSet {
             if selectedTitleFont != oldValue {
-                self.updateLayout()
+                updateLayout()
             }
         }
     }
@@ -578,7 +597,7 @@ open class ThemeTabBarItemContentView: UIView {
     open var imageSize: CGSize? {
         didSet {
             if imageSize != oldValue {
-                self.updateLayout()
+                updateLayout()
             }
         }
     }
@@ -586,7 +605,7 @@ open class ThemeTabBarItemContentView: UIView {
     open var selectedImageSize: CGSize? {
         didSet {
             if selectedImageSize != oldValue {
-                self.updateLayout()
+                updateLayout()
             }
         }
     }
@@ -594,7 +613,7 @@ open class ThemeTabBarItemContentView: UIView {
     open var disabledImageSize: CGSize? {
         didSet {
             if disabledImageSize != oldValue {
-                self.updateLayout()
+                updateLayout()
             }
         }
     }
@@ -619,19 +638,19 @@ open class ThemeTabBarItemContentView: UIView {
     
     open var renderingMode: UIImage.RenderingMode = .alwaysOriginal {
         didSet {
-            self.updateAppearance()
+            updateAppearance()
         }
     }
     
-    open var titlePositionAdjustment: UIOffset = UIOffset.zero {
+    open var titlePositionAdjustment = UIOffset.zero {
         didSet {
-            self.updateLayout()
+            updateLayout()
         }
     }
     
     open var insets = UIEdgeInsets.zero {
         didSet {
-            self.updateLayout()
+            updateLayout()
         }
     }
     
@@ -652,13 +671,13 @@ open class ThemeTabBarItemContentView: UIView {
     open var badgeValue: String? {
         didSet {
             if let value = badgeValue {
-                self.badgeView.badgeValue = value
+                badgeView.badgeValue = value
                 if badgeView.superview == nil {
-                    self.addSubview(badgeView)
+                    addSubview(badgeView)
                 }
-                self.updateLayout()
+                updateLayout()
             } else {
-                self.badgeView.removeFromSuperview()
+                badgeView.removeFromSuperview()
             }
             badgeChanged(animated: true, completion: nil)
         }
@@ -667,14 +686,14 @@ open class ThemeTabBarItemContentView: UIView {
     open var badgeColor: UIColor? {
         didSet {
             if let color = badgeColor {
-                self.badgeView.badgeColor = color
+                badgeView.badgeColor = color
             } else {
-                self.badgeView.badgeColor = .cg002
+                badgeView.badgeColor = .cg002
             }
         }
     }
     
-    open var badgeView: ThemeTabBarItemBadgeView = ThemeTabBarItemBadgeView() {
+    open var badgeView = ThemeTabBarItemBadgeView() {
         willSet {
             if badgeView.superview != nil {
                 badgeView.removeFromSuperview()
@@ -682,15 +701,15 @@ open class ThemeTabBarItemContentView: UIView {
         }
         didSet {
             if badgeView.superview != nil {
-                self.updateLayout()
+                updateLayout()
             }
         }
     }
     
-    open var badgeOffset: UIOffset = UIOffset(horizontal: 8.0, vertical: -20.0) {
+    open var badgeOffset = UIOffset(horizontal: 8.0, vertical: -20.0) {
         didSet {
             if badgeOffset != oldValue {
-                self.updateLayout()
+                updateLayout()
             }
         }
     }
@@ -703,71 +722,75 @@ open class ThemeTabBarItemContentView: UIView {
         addSubview(imageView)
         addSubview(titleLabel)
         
-        self.titleLabel.textColor = self.textColor
-        self.imageView.tintColor = self.imageColor
-        self.backgroundColor = self.backdropColor
+        titleLabel.textColor = textColor
+        imageView.tintColor = imageColor
+        backgroundColor = backdropColor
     }
     
     @available(*, unavailable)
-    public required init?(coder aDecoder: NSCoder) {
+    public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     open func updateAppearance() {
-        var selectedImage = (self.selectedImage ?? self.image)?.tint(self.selectedImageColor)
-        if let selectedImageSize = self.selectedImageSize {
+        var selectedImage = (selectedImage ?? image)?.tint(selectedImageColor)
+        if let selectedImageSize {
             selectedImage = selectedImage?.resize(selectedImageSize)
         }
-        var normalImage = self.image?.tint(self.imageColor)
-        if let imageSize = self.imageSize {
+        var normalImage = image?.tint(imageColor)
+        if let imageSize {
             normalImage = normalImage?.resize(imageSize)
         }
-        var disabledImage = (self.disabledImage ?? self.image)?.tint(self.disabledImageColor)
-        if let disabledImageSize = self.disabledImageSize {
+        var disabledImage = (disabledImage ?? image)?.tint(disabledImageColor)
+        if let disabledImageSize {
             disabledImage = disabledImage?.resize(disabledImageSize)
         }
-        if self.isEnabled {
-            self.imageView.image = self.isSelected ? selectedImage : normalImage
-            self.titleLabel.textColor = self.isSelected ? self.selectedTextColor : self.textColor
-            self.backgroundColor = self.isSelected ? self.selectedBackdropColor : self.backdropColor
+        if isEnabled {
+            imageView.image = isSelected ? selectedImage : normalImage
+            titleLabel.textColor = isSelected ? selectedTextColor : textColor
+            backgroundColor = isSelected ? selectedBackdropColor : backdropColor
         } else {
-            self.imageView.image = disabledImage
-            self.titleLabel.textColor = self.disabledTextColor
-            self.backgroundColor = self.disabledBackdropColor
+            imageView.image = disabledImage
+            titleLabel.textColor = disabledTextColor
+            backgroundColor = disabledBackdropColor
         }
     }
     
     open func updateLayout() {
-        let width = self.bounds.width
-        let height = self.bounds.height
+        let width = bounds.width
+        let height = bounds.height
         
         imageView.isHidden = (imageView.image == nil)
         titleLabel.isHidden = (titleLabel.text == nil)
-        if self.isSelected {
+        if isSelected {
             if let imageSize {
                 imageView.image = imageView.image?.resize(imageSize)
             }
-            titleLabel.font = self.selectedTitleFont ?? self.titleFont
+            titleLabel.font = selectedTitleFont ?? titleFont
         } else {
             if let selectedImageSize {
                 imageView.image = imageView.image?.resize(selectedImageSize)
             }
-            titleLabel.font = self.titleFont
+            titleLabel.font = titleFont
         }
         
-        if !imageView.isHidden && !titleLabel.isHidden {
+        if !imageView.isHidden, !titleLabel.isHidden {
             titleLabel.sizeToFit()
             imageView.sizeToFit()
-            titleLabel.frame = CGRect(x: (width - titleLabel.bounds.width) / 2.0
-                                      + titlePositionAdjustment.horizontal,
-                                      y: height - titleLabel.bounds.height - 1.0
-                                      + titlePositionAdjustment.vertical,
-                                      width: titleLabel.bounds.width,
-                                      height: titleLabel.bounds.height)
-            imageView.frame = CGRect(x: (width - imageView.bounds.width) / 2.0,
-                                     y: (height - imageView.bounds.height) / 2.0 - 6.0,
-                                     width: imageView.bounds.width,
-                                     height: imageView.bounds.height)
+            titleLabel.frame = CGRect(
+                x: (width - titleLabel.bounds.width) / 2.0
+                    + titlePositionAdjustment.horizontal,
+                y: height - titleLabel.bounds.height - 1.0
+                    + titlePositionAdjustment.vertical,
+                width: titleLabel.bounds.width,
+                height: titleLabel.bounds.height
+            )
+            imageView.frame = CGRect(
+                x: (width - imageView.bounds.width) / 2.0,
+                y: (height - imageView.bounds.height) / 2.0 - 6.0,
+                width: imageView.bounds.width,
+                height: imageView.bounds.height
+            )
         } else if !imageView.isHidden {
             imageView.sizeToFit()
             imageView.center = CGPoint(x: width / 2.0, y: height / 2.0)
@@ -777,17 +800,21 @@ open class ThemeTabBarItemContentView: UIView {
         }
         
         if badgeView.superview != nil {
-            let size = badgeView.sizeThatFits(self.frame.size)
-            badgeView.frame = CGRect(origin: CGPoint(x: width / 2.0 + badgeOffset.horizontal,
-                                                     y: height / 2.0 + badgeOffset.vertical),
-                                     size: size)
+            let size = badgeView.sizeThatFits(frame.size)
+            badgeView.frame = CGRect(
+                origin: CGPoint(
+                    x: width / 2.0 + badgeOffset.horizontal,
+                    y: height / 2.0 + badgeOffset.vertical
+                ),
+                size: size
+            )
             badgeView.setNeedsLayout()
         }
     }
 
     final func select(animated: Bool, completion: (() -> Void)?) {
         isSelected = true
-        if isEnabled && isHighlighted {
+        if isEnabled, isHighlighted {
             isHighlighted = false
             unhighlightedAnimation(animated: animated, completion: { [weak self] in
                 self?.updateAppearance()
@@ -802,14 +829,14 @@ open class ThemeTabBarItemContentView: UIView {
     final func deselect(animated: Bool, completion: (() -> Void)?) {
         isSelected = false
         updateAppearance()
-        self.deselectAnimation(animated: animated, completion: completion)
+        deselectAnimation(animated: animated, completion: completion)
     }
     
     final func reselect(animated: Bool, completion: (() -> Void)?) {
         if isSelected == false {
             select(animated: animated, completion: completion)
         } else {
-            if isEnabled && isHighlighted {
+            if isEnabled, isHighlighted {
                 isHighlighted = false
                 unhighlightedAnimation(animated: animated, completion: { [weak self] in
                     self?.reselectAnimation(animated: animated, completion: completion)
@@ -828,7 +855,7 @@ open class ThemeTabBarItemContentView: UIView {
             return
         }
         isHighlighted = true
-        self.highlightedAnimation(animated: animated, completion: completion)
+        highlightedAnimation(animated: animated, completion: completion)
     }
     
     final func unhighlighted(animated: Bool, completion: (() -> Void)?) {
@@ -839,37 +866,39 @@ open class ThemeTabBarItemContentView: UIView {
             return
         }
         isHighlighted = false
-        self.unhighlightedAnimation(animated: animated, completion: completion)
+        unhighlightedAnimation(animated: animated, completion: completion)
     }
     
     func badgeChanged(animated: Bool, completion: (() -> Void)?) {
-        self.badgeChangedAnimation(animated: animated, completion: completion)
+        badgeChangedAnimation(animated: animated, completion: completion)
     }
 
-    open func selectAnimation(animated: Bool, completion: (() -> Void)?) {
+    open func selectAnimation(animated _: Bool, completion: (() -> Void)?) {
         completion?()
     }
     
-    open func deselectAnimation(animated: Bool, completion: (() -> Void)?) {
+    open func deselectAnimation(animated _: Bool, completion: (() -> Void)?) {
         completion?()
     }
     
-    open func reselectAnimation(animated: Bool, completion: (() -> Void)?) {
+    open func reselectAnimation(animated _: Bool, completion: (() -> Void)?) {
         completion?()
     }
     
-    open func highlightedAnimation(animated: Bool, completion: (() -> Void)?) {
+    open func highlightedAnimation(animated _: Bool, completion: (() -> Void)?) {
         completion?()
     }
     
-    open func unhighlightedAnimation(animated: Bool, completion: (() -> Void)?) {
+    open func unhighlightedAnimation(animated _: Bool, completion: (() -> Void)?) {
         completion?()
     }
     
-    open func badgeChangedAnimation(animated: Bool, completion: (() -> Void)?) {
+    open func badgeChangedAnimation(animated _: Bool, completion: (() -> Void)?) {
         completion?()
     }
 }
+
+// MARK: - ThemeTabBarItemBadgeView
 
 open class ThemeTabBarItemBadgeView: UIView {
     
@@ -905,20 +934,20 @@ open class ThemeTabBarItemBadgeView: UIView {
         
         addSubview(imageView)
         addSubview(badgeLabel)
-        imageView.backgroundColor = self.badgeColor
+        imageView.backgroundColor = badgeColor
     }
     
     @available(*, unavailable)
-    public required init?(coder aDecoder: NSCoder) {
+    public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override open func layoutSubviews() {
         super.layoutSubviews()
         
-        self.layer.cornerRadius = self.bounds.height / 2
+        layer.cornerRadius = bounds.height / 2
         
-        guard let badgeValue = badgeValue else {
+        guard let badgeValue else {
             imageView.isHidden = true
             badgeLabel.isHidden = true
             return
@@ -942,7 +971,7 @@ open class ThemeTabBarItemBadgeView: UIView {
         badgeLabel.center = imageView.center
     }
     
-    override open func sizeThatFits(_ size: CGSize) -> CGSize {
+    override open func sizeThatFits(_: CGSize) -> CGSize {
         guard badgeValue != nil else {
             return CGSize(width: 12, height: 12)
         }

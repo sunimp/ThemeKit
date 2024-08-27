@@ -16,11 +16,11 @@ class SystemTheme: ITheme {
     var isDark: Bool {
         switch UITraitCollection.current.userInterfaceStyle {
         case .dark:
-            return true
+            true
         case .unspecified:
-            return UIWindow.keyWindow?.overrideUserInterfaceStyle == .dark
+            UIWindow.keyWindow?.overrideUserInterfaceStyle == .dark
         default:
-            return false
+            false
         }
     }
     

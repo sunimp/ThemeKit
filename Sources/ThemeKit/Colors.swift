@@ -5,8 +5,8 @@
 //  Created by Sun on 2024/8/19.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 import UIExtensions
 
@@ -92,6 +92,7 @@ extension Color {
 extension UIColor {
     
     // MARK: - Light
+
     public static let cg001Light = UIColor(hex: 0x00C29A)
     public static let cg002Light = UIColor(hex: 0xF24F5B)
     public static let cg003Light = UIColor(hex: 0x28C339)
@@ -169,6 +170,7 @@ extension UIColor {
     public static let zx019Light = UIColor(hex: 0xFFFFFF)
     
     // MARK: - Dark
+
     public static let cg001Dark = UIColor(hex: 0x07CDA5)
     public static let cg002Dark = UIColor(hex: 0xF25460)
     public static let cg003Dark = UIColor(hex: 0x3EC84E)
@@ -327,9 +329,9 @@ extension UIColor {
     private static func color(dark: UIColor, light: UIColor) -> UIColor {
         UIColor { traits in
             switch ThemeManager.shared.themeMode {
-            case .dark: return dark
-            case .light: return light
-            case .system: return traits.userInterfaceStyle == .dark ? dark : light
+            case .dark: dark
+            case .light: light
+            case .system: traits.userInterfaceStyle == .dark ? dark : light
             }
         }
     }

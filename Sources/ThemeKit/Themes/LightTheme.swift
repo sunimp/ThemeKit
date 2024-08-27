@@ -9,8 +9,8 @@ import UIKit
 
 class LightTheme: ITheme {
     
-    let isLight: Bool = true
-    let isDark: Bool = false
+    let isLight = true
+    let isDark = false
     
     let hudBlurStyle: UIBlurEffect.Style = .extraLight
     let keyboardAppearance: UIKeyboardAppearance = .light

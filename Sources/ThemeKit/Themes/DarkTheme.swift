@@ -9,8 +9,8 @@ import UIKit
 
 class DarkTheme: ITheme {
     
-    let isLight: Bool = false
-    let isDark: Bool = true
+    let isLight = false
+    let isDark = true
     
     let hudBlurStyle: UIBlurEffect.Style = .dark
     let keyboardAppearance: UIKeyboardAppearance = .dark

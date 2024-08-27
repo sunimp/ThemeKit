@@ -5,10 +5,10 @@
 //  Created by Sun on 2024/8/19.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
-// SwiftUI
+/// SwiftUI
 extension Font {
     
     public static let themeTitle1: Font = .roboto(size: 40, weight: .bold)
@@ -37,26 +37,26 @@ extension Font {
     
     public static func roboto(size: CGFloat, weight: Font.Weight) -> Font {
         FontManager.registerRobotoFontsIfNeeded()
-        let fontName: String
-        switch weight {
-        case .bold:
-            fontName = "Roboto-Bold"
-        case .medium:
-            fontName = "Roboto-Medium"
-        default:
-            fontName = "Roboto-Regular"
-        }
+        let fontName =
+            switch weight {
+            case .bold:
+                "Roboto-Bold"
+            case .medium:
+                "Roboto-Medium"
+            default:
+                "Roboto-Regular"
+            }
         return Font.custom(fontName, size: size)
     }
     
     public static func robotoItalic(size: CGFloat) -> Font {
         FontManager.registerRobotoFontsIfNeeded()
-        let fontName: String = "Roboto-Italic"
+        let fontName = "Roboto-Italic"
         return Font.custom(fontName, size: size)
     }
 }
 
-// UIKit
+/// UIKit
 extension UIFont {
     
     public static let title1: UIFont = .roboto(size: 40, weight: .bold)
@@ -85,28 +85,30 @@ extension UIFont {
     
     public static func roboto(size: CGFloat, weight: UIFont.Weight) -> UIFont {
         FontManager.registerRobotoFontsIfNeeded()
-        let fontName: String
-        switch weight {
-        case .bold:
-            fontName = "Roboto-Bold"
-        case .medium:
-            fontName = "Roboto-Medium"
-        default:
-            fontName = "Roboto-Regular"
-        }
+        let fontName =
+            switch weight {
+            case .bold:
+                "Roboto-Bold"
+            case .medium:
+                "Roboto-Medium"
+            default:
+                "Roboto-Regular"
+            }
         return UIFont(name: fontName, size: size) ?? .systemFont(ofSize: size, weight: weight)
     }
     
     public static func robotoItalic(size: CGFloat) -> UIFont {
         FontManager.registerRobotoFontsIfNeeded()
-        let fontName: String = "Roboto-Italic"
+        let fontName = "Roboto-Italic"
         return UIFont(name: fontName, size: size) ?? .italicSystemFont(ofSize: size)
     }
 }
 
+// MARK: - FontManager
+
 private enum FontManager {
     
-    private static var isFontRegistered: Bool = false
+    private static var isFontRegistered = false
     
     static func registerRobotoFontsIfNeeded() {
         if isFontRegistered {
@@ -124,7 +126,7 @@ private enum FontManager {
                 print("\(font).ttf not found.")
                 continue
             }
-            var error: Unmanaged<CFError>?
+            var error: Unmanaged<CFError>? = nil
             CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, &error)
             
             if let error {

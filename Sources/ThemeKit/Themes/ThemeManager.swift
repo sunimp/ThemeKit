@@ -5,10 +5,12 @@
 //  Created by Sun on 2024/8/19.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 import WWExtensions
+
+// MARK: - ThemeManager
 
 public class ThemeManager {
     
@@ -17,7 +19,8 @@ public class ThemeManager {
 
     public static var shared = ThemeManager()
 
-    @PostPublished public var themeMode: ThemeMode {
+    @PostPublished
+    public var themeMode: ThemeMode {
         didSet {
             UserDefaults.standard.set(themeMode.rawValue, forKey: ThemeManager.userDefaultsKey)
             currentTheme = ThemeManager.theme(mode: themeMode)
@@ -29,7 +32,7 @@ public class ThemeManager {
     private(set) var currentTheme: ITheme
 
     init() {
-        var storedThemeMode: ThemeMode?
+        var storedThemeMode: ThemeMode? = nil
         if let newLightMode = UserDefaults.standard.value(forKey: ThemeManager.userDefaultsKey) as? String {
             storedThemeMode = ThemeMode(rawValue: newLightMode)
         }
@@ -42,13 +45,15 @@ public class ThemeManager {
 
     private static func theme(mode: ThemeMode) -> ITheme {
         switch mode {
-        case .light: return LightTheme()
-        case .dark: return DarkTheme()
-        case .system: return SystemTheme()
+        case .light: LightTheme()
+        case .dark: DarkTheme()
+        case .system: SystemTheme()
         }
     }
 
 }
+
+// MARK: - Theme
 
 public class Theme {
 
@@ -87,6 +92,8 @@ public class Theme {
         }
     }
 }
+
+// MARK: - ThemeMode
 
 public enum ThemeMode: String {
     case light
