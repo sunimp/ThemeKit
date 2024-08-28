@@ -126,7 +126,7 @@ private enum FontManager {
                 print("\(font).ttf not found.")
                 continue
             }
-            var error: Unmanaged<CFError>? = nil
+            var error: Unmanaged<CFError>?
             CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, &error)
             
             if let error {

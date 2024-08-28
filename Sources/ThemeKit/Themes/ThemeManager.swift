@@ -32,7 +32,7 @@ public class ThemeManager {
     private(set) var currentTheme: ITheme
 
     init() {
-        var storedThemeMode: ThemeMode? = nil
+        var storedThemeMode: ThemeMode?
         if let newLightMode = UserDefaults.standard.value(forKey: ThemeManager.userDefaultsKey) as? String {
             storedThemeMode = ThemeMode(rawValue: newLightMode)
         }
