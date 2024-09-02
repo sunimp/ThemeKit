@@ -1,8 +1,7 @@
 //
 //  ThemeManager.swift
-//  ThemeKit
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import Combine
@@ -13,11 +12,18 @@ import WWExtensions
 // MARK: - ThemeManager
 
 public class ThemeManager {
-    
+    // MARK: Static Properties
+
+    public static var shared = ThemeManager()
+
     private static let defaultLightMode: ThemeMode = .system
     private static let userDefaultsKey = "theme_mode"
 
-    public static var shared = ThemeManager()
+    // MARK: Properties
+
+    private(set) var currentTheme: ITheme
+
+    // MARK: Computed Properties
 
     @PostPublished
     public var themeMode: ThemeMode {
@@ -29,7 +35,7 @@ public class ThemeManager {
         }
     }
 
-    private(set) var currentTheme: ITheme
+    // MARK: Lifecycle
 
     init() {
         var storedThemeMode: ThemeMode?
@@ -43,6 +49,8 @@ public class ThemeManager {
         self.themeMode = themeMode
     }
 
+    // MARK: Static Functions
+
     private static func theme(mode: ThemeMode) -> ITheme {
         switch mode {
         case .light: LightTheme()
@@ -50,16 +58,18 @@ public class ThemeManager {
         case .system: SystemTheme()
         }
     }
-
 }
 
 // MARK: - Theme
 
 public class Theme {
+    // MARK: Static Computed Properties
 
     public static var current: ITheme {
         ThemeManager.shared.currentTheme
     }
+
+    // MARK: Static Functions
 
     public static func updateNavigationBarTheme(
         _ backgroundColor: UIColor = .zx009,

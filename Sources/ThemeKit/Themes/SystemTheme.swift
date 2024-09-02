@@ -1,14 +1,12 @@
 //
 //  SystemTheme.swift
-//  ThemeKit
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import UIKit
 
 class SystemTheme: ITheme {
-    
     var isLight: Bool {
         !isDark
     }
@@ -29,5 +27,4 @@ class SystemTheme: ITheme {
     var statusBarStyle: UIStatusBarStyle { .default }
 
     var alphaSecondaryButtonGradient: CGFloat { UITraitCollection.current.userInterfaceStyle == .dark ? 0.4 : 1 }
-
 }

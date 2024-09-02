@@ -1,8 +1,7 @@
 //
 //  Colors.swift
-//  ThemeKit
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import SwiftUI
@@ -11,7 +10,6 @@ import UIKit
 import UIExtensions
 
 extension Color {
-    
     public static let cg001 = Color("cg001", bundle: Bundle.module)
     public static let cg002 = Color("cg002", bundle: Bundle.module)
     public static let cg003 = Color("cg003", bundle: Bundle.module)
@@ -90,7 +88,6 @@ extension Color {
 }
 
 extension UIColor {
-    
     // MARK: - Light
 
     public static let cg001Light = UIColor(hex: 0x00C29A)
@@ -249,7 +246,6 @@ extension UIColor {
 }
 
 extension UIColor {
-    
     public static var cg001: UIColor { color(dark: .cg001Dark, light: .cg001Light) }
     public static var cg002: UIColor { color(dark: .cg002Dark, light: .cg002Light) }
     public static var cg003: UIColor { color(dark: .cg003Dark, light: .cg003Light) }

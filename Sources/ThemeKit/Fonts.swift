@@ -1,8 +1,7 @@
 //
 //  Fonts.swift
-//  ThemeKit
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import SwiftUI
@@ -10,7 +9,6 @@ import UIKit
 
 /// SwiftUI
 extension Font {
-    
     public static let themeTitle1: Font = .roboto(size: 40, weight: .bold)
     public static let themeTitle2: Font = .roboto(size: 34, weight: .bold)
     public static let themeTitle2R: Font = .roboto(size: 34, weight: .regular)
@@ -34,7 +32,6 @@ extension Font {
 }
 
 extension Font {
-    
     public static func roboto(size: CGFloat, weight: Font.Weight) -> Font {
         FontManager.registerRobotoFontsIfNeeded()
         let fontName =
@@ -58,7 +55,6 @@ extension Font {
 
 /// UIKit
 extension UIFont {
-    
     public static let title1: UIFont = .roboto(size: 40, weight: .bold)
     public static let title2: UIFont = .roboto(size: 34, weight: .bold)
     public static let title2R: UIFont = .roboto(size: 34, weight: .regular)
@@ -82,7 +78,6 @@ extension UIFont {
 }
 
 extension UIFont {
-    
     public static func roboto(size: CGFloat, weight: UIFont.Weight) -> UIFont {
         FontManager.registerRobotoFontsIfNeeded()
         let fontName =
@@ -107,9 +102,12 @@ extension UIFont {
 // MARK: - FontManager
 
 private enum FontManager {
-    
+    // MARK: Static Properties
+
     private static var isFontRegistered = false
-    
+
+    // MARK: Static Functions
+
     static func registerRobotoFontsIfNeeded() {
         if isFontRegistered {
             return

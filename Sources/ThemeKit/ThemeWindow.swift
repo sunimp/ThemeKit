@@ -1,16 +1,18 @@
 //
 //  ThemeWindow.swift
-//  ThemeKit
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import Combine
 import UIKit
 
 open class ThemeWindow: UIWindow {
-    
+    // MARK: Properties
+
     private var cancellables = Set<AnyCancellable>()
+
+    // MARK: Lifecycle
 
     override public init(windowScene: UIWindowScene) {
         super.init(windowScene: windowScene)
@@ -29,6 +31,8 @@ open class ThemeWindow: UIWindow {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Functions
+
     private func update(themeMode: ThemeMode) {
         UIView.transition(with: self, duration: 0.5, options: .transitionCrossDissolve, animations: {
             switch themeMode {
@@ -41,5 +45,4 @@ open class ThemeWindow: UIWindow {
             }
         }, completion: nil)
     }
-
 }

@@ -1,14 +1,12 @@
 //
 //  LightTheme.swift
-//  ThemeKit
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import UIKit
 
 class LightTheme: ITheme {
-    
     let isLight = true
     let isDark = false
     

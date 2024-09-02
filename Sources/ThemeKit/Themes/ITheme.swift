@@ -1,14 +1,12 @@
 //
 //  ITheme.swift
-//  ThemeKit
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import UIKit
 
 public protocol ITheme {
-    
     var isLight: Bool { get }
     var isDark: Bool { get }
     

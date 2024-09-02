@@ -1,6 +1,5 @@
 //
 //  ThemeTabBar.swift
-//  ThemeKit
 //
 //  Created by Sun on 2024/8/23.
 //
@@ -12,7 +11,6 @@ import UIExtensions
 // MARK: - ThemeTabBarDelegate
 
 protocol ThemeTabBarDelegate: AnyObject {
-    
     func tabBar(_ tabBar: UITabBar, shouldSelect item: UITabBarItem) -> Bool
     
     func tabBar(_ tabBar: UITabBar, shouldHijack item: UITabBarItem) -> Bool
@@ -23,23 +21,28 @@ protocol ThemeTabBarDelegate: AnyObject {
 // MARK: - ThemeTabBar
 
 open class ThemeTabBar: UITabBar {
-    
-    weak var customDelegate: ThemeTabBarDelegate?
-    
-    weak var tabBarController: UITabBarController?
-    
-    public var itemEdgeInsets: UIEdgeInsets = .zero
-    
-    private var containers: [ThemeTabBarItemContainer] = []
-    
-    private let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-    
+    // MARK: Overridden Properties
+
     override open var items: [UITabBarItem]? {
         didSet {
             rebuild()
         }
     }
+
+    // MARK: Properties
+
+    public var itemEdgeInsets: UIEdgeInsets = .zero
+
+    weak var customDelegate: ThemeTabBarDelegate?
     
+    weak var tabBarController: UITabBarController?
+
+    private var containers: [ThemeTabBarItemContainer] = []
+    
+    private let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+
+    // MARK: Overridden Functions
+
     override open func setItems(_ items: [UITabBarItem]?, animated: Bool) {
         super.setItems(items, animated: animated)
         rebuild()
@@ -61,14 +64,15 @@ open class ThemeTabBar: UITabBar {
                         y: point.y - container.frame.origin.y
                     ),
                     with: event
-                )
-            {
+                ) {
                 insides = true
             }
         }
         return insides
     }
-    
+
+    // MARK: Functions
+
     func updateLayout() {
         effectView.frame = bounds
         
@@ -145,41 +149,12 @@ open class ThemeTabBar: UITabBar {
         }
     }
     
-    private func removeAll() {
-        for container in containers {
-            container.removeFromSuperview()
-        }
-        containers.removeAll()
-        effectView.removeFromSuperview()
-    }
-    
-    private func rebuild() {
-        removeAll()
-        guard let tabBarItems = items else {
-            return
-        }
-        
-        addSubview(effectView)
-        
-        for (idx, item) in tabBarItems.enumerated() {
-            let container = ThemeTabBarItemContainer(self, tag: 1_000 + idx)
-            addSubview(container)
-            containers.append(container)
-            
-            if let item = item as? ThemeTabBarItem {
-                container.addSubview(item.contentView)
-            }
-        }
-        
-        setNeedsLayout()
-    }
-    
     @objc
     func highlightedAction(_ sender: AnyObject?) {
         guard let container = sender as? ThemeTabBarItemContainer else {
             return
         }
-        let newIndex = max(0, container.tag - 1_000)
+        let newIndex = max(0, container.tag - 1000)
         guard newIndex < items?.count ?? 0, let item = items?[newIndex], item.isEnabled == true else {
             return
         }
@@ -198,7 +173,7 @@ open class ThemeTabBar: UITabBar {
         guard let container = sender as? ThemeTabBarItemContainer else {
             return
         }
-        let newIndex = max(0, container.tag - 1_000)
+        let newIndex = max(0, container.tag - 1000)
         guard newIndex < items?.count ?? 0, let item = items?[newIndex], item.isEnabled == true else {
             return
         }
@@ -217,7 +192,7 @@ open class ThemeTabBar: UITabBar {
         guard let container = sender as? ThemeTabBarItemContainer else {
             return
         }
-        select(itemAtIndex: container.tag - 1_000, animated: true)
+        select(itemAtIndex: container.tag - 1000, animated: true)
     }
     
     @objc
@@ -272,8 +247,7 @@ open class ThemeTabBar: UITabBar {
                     if navigationController.viewControllers.contains(tabBarController) {
                         if
                             navigationController.viewControllers.count > 1,
-                            navigationController.viewControllers.last != tabBarController
-                        {
+                            navigationController.viewControllers.last != tabBarController {
                             navigationController.popToViewController(tabBarController, animated: true)
                         }
                     } else {
@@ -288,12 +262,41 @@ open class ThemeTabBar: UITabBar {
         delegate?.tabBar?(self, didSelect: item)
     }
     
+    private func removeAll() {
+        for container in containers {
+            container.removeFromSuperview()
+        }
+        containers.removeAll()
+        effectView.removeFromSuperview()
+    }
+    
+    private func rebuild() {
+        removeAll()
+        guard let tabBarItems = items else {
+            return
+        }
+        
+        addSubview(effectView)
+        
+        for (idx, item) in tabBarItems.enumerated() {
+            let container = ThemeTabBarItemContainer(self, tag: 1000 + idx)
+            addSubview(container)
+            containers.append(container)
+            
+            if let item = item as? ThemeTabBarItem {
+                container.addSubview(item.contentView)
+            }
+        }
+        
+        setNeedsLayout()
+    }
 }
 
 // MARK: - ThemeTabBarItem
 
 open class ThemeTabBarItem: UITabBarItem {
-    
+    // MARK: Overridden Properties
+
     override open var tag: Int {
         get { contentView.tag }
         set { contentView.tag = newValue }
@@ -309,6 +312,32 @@ open class ThemeTabBarItem: UITabBarItem {
         set { contentView.title = newValue }
     }
     
+    override open var image: UIImage? {
+        didSet { contentView.image = image }
+    }
+    
+    override open var selectedImage: UIImage? {
+        get { contentView.selectedImage }
+        set { contentView.selectedImage = newValue }
+    }
+    
+    override open var badgeValue: String? {
+        get { contentView.badgeValue }
+        set { contentView.badgeValue = newValue }
+    }
+    
+    override open var titlePositionAdjustment: UIOffset {
+        get { contentView.titlePositionAdjustment }
+        set { contentView.titlePositionAdjustment = newValue }
+    }
+    
+    override open var badgeColor: UIColor? {
+        get { contentView.badgeColor }
+        set { contentView.badgeColor = newValue }
+    }
+
+    // MARK: Computed Properties
+
     open var textColor: UIColor {
         get { contentView.textColor }
         set { contentView.textColor = newValue }
@@ -332,15 +361,6 @@ open class ThemeTabBarItem: UITabBarItem {
     open var selectedTitleFont: UIFont? {
         get { contentView.selectedTitleFont }
         set { contentView.selectedTitleFont = newValue }
-    }
-    
-    override open var image: UIImage? {
-        didSet { contentView.image = image }
-    }
-    
-    override open var selectedImage: UIImage? {
-        get { contentView.selectedImage }
-        set { contentView.selectedImage = newValue }
     }
     
     open var disabledImage: UIImage? {
@@ -393,21 +413,6 @@ open class ThemeTabBarItem: UITabBarItem {
         set { contentView.disabledBackdropColor = newValue }
     }
     
-    override open var badgeValue: String? {
-        get { contentView.badgeValue }
-        set { contentView.badgeValue = newValue }
-    }
-    
-    override open var titlePositionAdjustment: UIOffset {
-        get { contentView.titlePositionAdjustment }
-        set { contentView.titlePositionAdjustment = newValue }
-    }
-    
-    override open var badgeColor: UIColor? {
-        get { contentView.badgeColor }
-        set { contentView.badgeColor = newValue }
-    }
-    
     open var renderingMode: UIImage.RenderingMode {
         get { contentView.renderingMode }
         set { contentView.renderingMode = newValue }
@@ -424,7 +429,9 @@ open class ThemeTabBarItem: UITabBarItem {
             contentView.updateAppearance()
         }
     }
-    
+
+    // MARK: Lifecycle
+
     public init(
         _ contentView: ThemeTabBarItemContentView = ThemeTabBarItemContentView(),
         title: String? = nil,
@@ -444,7 +451,9 @@ open class ThemeTabBarItem: UITabBarItem {
     public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: Functions
+
     open func updateAppearance() {
         contentView.updateAppearance()
     }
@@ -453,7 +462,8 @@ open class ThemeTabBarItem: UITabBarItem {
 // MARK: - ThemeTabBarItemContainer
 
 class ThemeTabBarItemContainer: UIControl {
-    
+    // MARK: Lifecycle
+
     init(_ target: AnyObject?, tag: Int) {
         super.init(frame: .zero)
         self.tag = tag
@@ -468,7 +478,9 @@ class ThemeTabBarItemContainer: UIControl {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: Overridden Functions
+
     override func layoutSubviews() {
         super.layoutSubviews()
         for subview in subviews {
@@ -494,8 +506,7 @@ class ThemeTabBarItemContainer: UIControl {
                         y: point.y - subview.frame.origin.y
                     ),
                     with: event
-                )
-            {
+                ) {
                 insides = true
             }
         }
@@ -506,7 +517,28 @@ class ThemeTabBarItemContainer: UIControl {
 // MARK: - ThemeTabBarItemContentView
 
 open class ThemeTabBarItemContentView: UIView {
+    // MARK: Properties
+
+    open var isSelected = false
     
+    open var isHighlighted = false
+    
+    open var imageView: UIImageView = {
+        let imageView = UIImageView(frame: .zero)
+        imageView.backgroundColor = .clear
+        return imageView
+    }()
+    
+    open var titleLabel: UILabel = {
+        let titleLabel = UILabel(frame: .zero)
+        titleLabel.backgroundColor = .clear
+        titleLabel.textColor = .clear
+        titleLabel.textAlignment = .center
+        return titleLabel
+    }()
+
+    // MARK: Computed Properties
+
     open var title: String? {
         didSet {
             titleLabel.text = title
@@ -516,19 +548,25 @@ open class ThemeTabBarItemContentView: UIView {
     
     open var image: UIImage? {
         didSet {
-            if !isSelected { updateAppearance() }
+            if !isSelected {
+                updateAppearance()
+            }
         }
     }
     
     open var selectedImage: UIImage? {
         didSet {
-            if isSelected { updateAppearance() }
+            if isSelected {
+                updateAppearance()
+            }
         }
     }
     
     open var disabledImage: UIImage? {
         didSet {
-            if !isEnabled { updateAppearance() }
+            if !isEnabled {
+                updateAppearance()
+            }
         }
     }
     
@@ -538,25 +576,27 @@ open class ThemeTabBarItemContentView: UIView {
         }
     }
     
-    open var isSelected = false
-    
-    open var isHighlighted = false
-    
     open var textColor: UIColor = .zx002 {
         didSet {
-            if !isSelected { titleLabel.textColor = textColor }
+            if !isSelected {
+                titleLabel.textColor = textColor
+            }
         }
     }
     
     open var selectedTextColor: UIColor = .cg005 {
         didSet {
-            if isSelected { titleLabel.textColor = selectedTextColor }
+            if isSelected {
+                titleLabel.textColor = selectedTextColor
+            }
         }
     }
     
     open var disabledTextColor: UIColor = .zx004 {
         didSet {
-            if !isEnabled { titleLabel.textColor = disabledTextColor }
+            if !isEnabled {
+                titleLabel.textColor = disabledTextColor
+            }
         }
     }
 
@@ -578,19 +618,25 @@ open class ThemeTabBarItemContentView: UIView {
     
     open var imageColor: UIColor = .zx002 {
         didSet {
-            if !isSelected { imageView.image = image?.tint(imageColor) }
+            if !isSelected {
+                imageView.image = image?.tint(imageColor)
+            }
         }
     }
 
     open var selectedImageColor: UIColor = .cg005 {
         didSet {
-            if isSelected { imageView.image = (selectedImage ?? image)?.tint(selectedImageColor) }
+            if isSelected {
+                imageView.image = (selectedImage ?? image)?.tint(selectedImageColor)
+            }
         }
     }
     
     open var disabledImageColor: UIColor = .zx004 {
         didSet {
-            if !isEnabled { imageView.image = image?.tint(disabledImageColor) }
+            if !isEnabled {
+                imageView.image = image?.tint(disabledImageColor)
+            }
         }
     }
     
@@ -620,19 +666,25 @@ open class ThemeTabBarItemContentView: UIView {
     
     open var backdropColor: UIColor = .clear {
         didSet {
-            if !isSelected { backgroundColor = backdropColor }
+            if !isSelected {
+                backgroundColor = backdropColor
+            }
         }
     }
     
     open var selectedBackdropColor: UIColor = .clear {
         didSet {
-            if isSelected { backgroundColor = selectedBackdropColor }
+            if isSelected {
+                backgroundColor = selectedBackdropColor
+            }
         }
     }
     
     open var disabledBackdropColor: UIColor = .clear {
         didSet {
-            if !isEnabled { backgroundColor = disabledBackdropColor }
+            if !isEnabled {
+                backgroundColor = disabledBackdropColor
+            }
         }
     }
     
@@ -653,20 +705,6 @@ open class ThemeTabBarItemContentView: UIView {
             updateLayout()
         }
     }
-    
-    open var imageView: UIImageView = {
-        let imageView = UIImageView(frame: .zero)
-        imageView.backgroundColor = .clear
-        return imageView
-    }()
-    
-    open var titleLabel: UILabel = {
-        let titleLabel = UILabel(frame: .zero)
-        titleLabel.backgroundColor = .clear
-        titleLabel.textColor = .clear
-        titleLabel.textAlignment = .center
-        return titleLabel
-    }()
     
     open var badgeValue: String? {
         didSet {
@@ -713,7 +751,9 @@ open class ThemeTabBarItemContentView: UIView {
             }
         }
     }
-    
+
+    // MARK: Lifecycle
+
     override public init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -731,7 +771,9 @@ open class ThemeTabBarItemContentView: UIView {
     public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: Functions
+
     open func updateAppearance() {
         var selectedImage = (selectedImage ?? image)?.tint(selectedImageColor)
         if let selectedImageSize {
@@ -812,6 +854,30 @@ open class ThemeTabBarItemContentView: UIView {
         }
     }
 
+    open func selectAnimation(animated _: Bool, completion: (() -> Void)?) {
+        completion?()
+    }
+    
+    open func deselectAnimation(animated _: Bool, completion: (() -> Void)?) {
+        completion?()
+    }
+    
+    open func reselectAnimation(animated _: Bool, completion: (() -> Void)?) {
+        completion?()
+    }
+    
+    open func highlightedAnimation(animated _: Bool, completion: (() -> Void)?) {
+        completion?()
+    }
+    
+    open func unhighlightedAnimation(animated _: Bool, completion: (() -> Void)?) {
+        completion?()
+    }
+    
+    open func badgeChangedAnimation(animated _: Bool, completion: (() -> Void)?) {
+        completion?()
+    }
+
     final func select(animated: Bool, completion: (() -> Void)?) {
         isSelected = true
         if isEnabled, isHighlighted {
@@ -872,48 +938,13 @@ open class ThemeTabBarItemContentView: UIView {
     func badgeChanged(animated: Bool, completion: (() -> Void)?) {
         badgeChangedAnimation(animated: animated, completion: completion)
     }
-
-    open func selectAnimation(animated _: Bool, completion: (() -> Void)?) {
-        completion?()
-    }
-    
-    open func deselectAnimation(animated _: Bool, completion: (() -> Void)?) {
-        completion?()
-    }
-    
-    open func reselectAnimation(animated _: Bool, completion: (() -> Void)?) {
-        completion?()
-    }
-    
-    open func highlightedAnimation(animated _: Bool, completion: (() -> Void)?) {
-        completion?()
-    }
-    
-    open func unhighlightedAnimation(animated _: Bool, completion: (() -> Void)?) {
-        completion?()
-    }
-    
-    open func badgeChangedAnimation(animated _: Bool, completion: (() -> Void)?) {
-        completion?()
-    }
 }
 
 // MARK: - ThemeTabBarItemBadgeView
 
 open class ThemeTabBarItemBadgeView: UIView {
-    
-    open var badgeColor: UIColor? = .cg002 {
-        didSet {
-            imageView.backgroundColor = badgeColor
-        }
-    }
-    
-    open var badgeValue: String? {
-        didSet {
-            badgeLabel.text = badgeValue
-        }
-    }
-    
+    // MARK: Properties
+
     open var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
@@ -928,7 +959,23 @@ open class ThemeTabBarItemBadgeView: UIView {
         label.backgroundColor = .clear
         return label
     }()
+
+    // MARK: Computed Properties
+
+    open var badgeColor: UIColor? = .cg002 {
+        didSet {
+            imageView.backgroundColor = badgeColor
+        }
+    }
     
+    open var badgeValue: String? {
+        didSet {
+            badgeLabel.text = badgeValue
+        }
+    }
+
+    // MARK: Lifecycle
+
     override public init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -941,7 +988,9 @@ open class ThemeTabBarItemBadgeView: UIView {
     public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: Overridden Functions
+
     override open func layoutSubviews() {
         super.layoutSubviews()
         

@@ -1,13 +1,11 @@
 //
-//  UIKeyboardAppearance+Default.swift
-//  ThemeKit
+//  UIKeyboardAppearance.swift
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import UIKit
 
 extension UIKeyboardAppearance {
-    
     public static var themeDefault: UIKeyboardAppearance { Theme.current.keyboardAppearance }
 }

@@ -1,14 +1,12 @@
 //
 //  Margins.swift
-//  ThemeKit
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import UIKit
 
 extension CGFloat {
-    
     public static let cornerRadius05x: CGFloat = 2
     public static let cornerRadius1x: CGFloat = 4
     public static let cornerRadius2x: CGFloat = 8

@@ -1,8 +1,7 @@
 //
-//  UIImageView+Async.swift
-//  ThemeKit
+//  UIImageView.swift
 //
-//  Created by Sun on 2024/8/19.
+//  Created by Sun on 2021/11/30.
 //
 
 import UIKit
@@ -11,7 +10,6 @@ import Alamofire
 import Kingfisher
 
 extension UIImageView {
-
     public func asyncSetImage(imageBlock: @escaping () -> UIImage?) {
         DispatchQueue.global(qos: .userInitiated).async {
             let image = imageBlock()
@@ -23,7 +21,10 @@ extension UIImageView {
     }
 
     public func setImage(withURLString urlString: String, placeholder: UIImage?) {
-        kf.setImage(with: URL(string: urlString), placeholder: placeholder, options: [.scaleFactor(UIScreen.main.scale)])
+        kf.setImage(
+            with: URL(string: urlString),
+            placeholder: placeholder,
+            options: [.scaleFactor(UIScreen.main.scale)]
+        )
     }
-
 }
