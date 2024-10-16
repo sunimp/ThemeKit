@@ -1,4 +1,4 @@
-# ThemeKit.Swift
+# ThemeKit
 
 UI themes and components
 
@@ -14,10 +14,10 @@ UI themes and components
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sunimp/ThemeKit.Swift.git", .upToNextMajor(from: "2.3.0"))
+    .package(url: "https://github.com/sunimp/ThemeKit.git", .upToNextMajor(from: "1.0.0"))
 ]
 ```
 
 ## License
 
-`ThemeKit.Swift` is available under the MIT license. See the LICENSE file for more info.
+`ThemeKit` is available under the MIT license. See the LICENSE file for more info.

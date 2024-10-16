@@ -1,5 +1,6 @@
 //
 //  ThemeManager.swift
+//  ThemeKit
 //
 //  Created by Sun on 2021/11/30.
 //
@@ -7,7 +8,7 @@
 import Combine
 import UIKit
 
-import WWExtensions
+import SWExtensions
 
 // MARK: - ThemeManager
 

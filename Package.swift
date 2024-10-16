@@ -15,10 +15,10 @@ let package = Package(
         ],
         dependencies: [
             .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.9.1")),
-            .package(url: "https://github.com/onevcat/Kingfisher.git", .upToNextMajor(from: "7.12.0")),
-            .package(url: "https://github.com/sunimp/UIExtensions.Swift.git", .upToNextMajor(from: "1.3.0")),
-            .package(url: "https://github.com/sunimp/WWExtensions.Swift.git", .upToNextMajor(from: "1.2.0")),
-            .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.54.3"),
+            .package(url: "https://github.com/onevcat/Kingfisher.git", .upToNextMajor(from: "8.1.0")),
+            .package(url: "https://github.com/sunimp/UIExtensions.git", .upToNextMajor(from: "1.0.0")),
+            .package(url: "https://github.com/sunimp/SWExtensions.git", .upToNextMajor(from: "1.0.0")),
+            .package(url: "https://github.com/nicklockwood/SwiftFormat.git", from: "0.54.6"),
         ],
         targets: [
             .target(
@@ -26,8 +26,8 @@ let package = Package(
                     dependencies: [
                         "Alamofire",
                         "Kingfisher",
-                        .product(name: "UIExtensions", package: "UIExtensions.Swift"),
-                        .product(name: "WWExtensions", package: "WWExtensions.Swift"),
+                        "UIExtensions",
+                        "SWExtensions"
                     ],
                     resources: [
                         .process("Fonts")

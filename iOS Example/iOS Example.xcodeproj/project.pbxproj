@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		3A39D0972755E5FC0022CB8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A39D0952755E5FC0022CB8B /* AppDelegate.swift */; };
+		A46AFF832CBFD6AB000086AC /* ThemeKit in Frameworks */ = {isa = PBXBuildFile; productRef = A46AFF822CBFD6AB000086AC /* ThemeKit */; };
 		A48C64262C78385F000E3EE2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C64252C78385F000E3EE2 /* MainViewController.swift */; };
 		D31D685E2A05225100D03E2F /* ColorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31D685D2A05225100D03E2F /* ColorsView.swift */; };
 		D31D68622A0B913400D03E2F /* FontsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31D68612A0B913400D03E2F /* FontsView.swift */; };
@@ -21,7 +22,7 @@
 		A48C64252C78385F000E3EE2 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		D31D685D2A05225100D03E2F /* ColorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsView.swift; sourceTree = "<group>"; };
 		D31D68612A0B913400D03E2F /* FontsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontsView.swift; sourceTree = "<group>"; };
-		D94502F5261F98A400F6BF2E /* ThemeKit Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ThemeKit Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D94502F5261F98A400F6BF2E /* ThemeKit-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ThemeKit-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D94502FC261F98A500F6BF2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D9450301261F98A500F6BF2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -33,6 +34,7 @@
 			files = (
 				D945030C261F99CC00F6BF2E /* ThemeKit in Frameworks */,
 				D3500A3628EEE8960093A369 /* SnapKit in Frameworks */,
+				A46AFF832CBFD6AB000086AC /* ThemeKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +53,7 @@
 		D94502F6261F98A400F6BF2E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D94502F5261F98A400F6BF2E /* ThemeKit Demo.app */,
+				D94502F5261F98A400F6BF2E /* ThemeKit-Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +97,10 @@
 			packageProductDependencies = (
 				D945030B261F99CC00F6BF2E /* ThemeKit */,
 				D3500A3528EEE8960093A369 /* SnapKit */,
+				A46AFF822CBFD6AB000086AC /* ThemeKit */,
 			);
 			productName = "iOS Example";
-			productReference = D94502F5261F98A400F6BF2E /* ThemeKit Demo.app */;
+			productReference = D94502F5261F98A400F6BF2E /* ThemeKit-Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -108,7 +111,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					D94502F4261F98A400F6BF2E = {
 						CreatedOnToolsVersion = 12.4;
@@ -127,6 +130,7 @@
 			mainGroup = D94502EC261F98A400F6BF2E;
 			packageReferences = (
 				D3500A3428EEE8960093A369 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				A46AFF812CBFD6AB000086AC /* XCLocalSwiftPackageReference "../../ThemeKit" */,
 			);
 			productRefGroup = D94502F6261F98A400F6BF2E /* Products */;
 			projectDirPath = "";
@@ -297,7 +301,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sunimp.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "ThemeKit Demo";
+				PRODUCT_NAME = "ThemeKit-Example";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -323,7 +327,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sunimp.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "ThemeKit Demo";
+				PRODUCT_NAME = "ThemeKit-Example";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -355,18 +359,29 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		A46AFF812CBFD6AB000086AC /* XCLocalSwiftPackageReference "../../ThemeKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../ThemeKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		D3500A3428EEE8960093A369 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
+				minimumVersion = 5.7.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A46AFF822CBFD6AB000086AC /* ThemeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ThemeKit;
+		};
 		D3500A3528EEE8960093A369 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D3500A3428EEE8960093A369 /* XCRemoteSwiftPackageReference "SnapKit" */;
